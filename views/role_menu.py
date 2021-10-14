@@ -1,11 +1,11 @@
 
 import dash_bootstrap_components as dbc
+
 from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
 
 from app import app
 from configuration.company_mgt import company_dropdown
 from configuration.role_mgt import company_wise_role
-from configuration.menu_mgt import company_wise_menu
 from configuration.role_menu_mgt import add_role_menu
 
 
@@ -79,31 +79,31 @@ layout = dbc.Container([
         #            ], md=2)
         #         ]),
         html.Hr(),
-        # dbc.Row([
-        #     dbc.Col([
-        #         dt.DataTable(
-        #             id='datatable',
-        #             # columns=[
-        #             #     {"name": i, "id": i, "deletable": True, "selectable": True} for i in df.columns
-        #             # ],
-        #             data=[],
-        #             editable=True,
-        #             filter_action="native",
-        #             sort_action="native",
-        #             sort_mode="multi",
-        #             column_selectable="single",
-        #             row_selectable="multi",
-        #             row_deletable=True,
-        #             selected_columns=[],
-        #             selected_rows=[],
-        #             page_action="native",
-        #             page_current=0,
-        #             page_size=10,
-        #         ),
-        #         # html.Div(id='datatable-interactivity-container')
-        #
-        # ], md=12),
-        # ]),
+        dbc.Row([
+            dbc.Col([
+                dash_table.DataTable(
+                    id='datatable',
+                    # columns=[
+                    #     {"name": i, "id": i, "deletable": True, "selectable": True} for i in df.columns
+                    # ],
+                    data=[],
+                    editable=True,
+                    filter_action="native",
+                    sort_action="native",
+                    sort_mode="multi",
+                    column_selectable="single",
+                    row_selectable="multi",
+                    row_deletable=True,
+                    selected_columns=[],
+                    selected_rows=[],
+                    page_action="native",
+                    page_current=0,
+                    page_size=10,
+                ),
+                # html.Div(id='datatable-interactivity-container')
+
+        ], md=12),
+        ]),
     ], className='jumbotron'),
 ])
 

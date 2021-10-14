@@ -46,7 +46,7 @@ def displayPage(pathname):
         else:
             return login.layout
 
-    if pathname.lower() == '/default':
+    if pathname.lower() == '/page1':
         if current_user.is_authenticated:
             return default.layout
         else:

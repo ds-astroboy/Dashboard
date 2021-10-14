@@ -1,9 +1,6 @@
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_bootstrap_components as dbc
-import dash_table as dt
-from dash.dependencies import Input, Output, State
 
+import dash_bootstrap_components as dbc
+from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
 from app import app
 from configuration.role_mgt import show_roles, add_role
 from configuration.company_mgt import company_dropdown
@@ -65,7 +62,7 @@ layout = dbc.Container([
         html.Hr(),
         dbc.Row([
             dbc.Col([
-                dt.DataTable(
+                dash_table.DataTable(
                     id='roles',
                     columns=[{'name': 'ID', 'id': 'RoleId'},
                             {'name': 'Role', 'id': 'RoleName'},

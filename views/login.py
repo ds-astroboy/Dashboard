@@ -4,7 +4,7 @@
 from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
 
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output, State
+
 
 from app import app, User
 from flask_login import login_user
