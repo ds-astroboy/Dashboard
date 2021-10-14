@@ -1,12 +1,12 @@
 # import dash_core_components as dcc
 # import dash_html_components as html
-from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
+from dash import html, dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 
 from app import app
 from flask_login import current_user
-from users_mgt import update_password
+from configuration.users_mgt import update_password
 from werkzeug.security import check_password_hash
 
 

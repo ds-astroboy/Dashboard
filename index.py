@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 
 from app import app
 from flask_login import logout_user, current_user
-from views import login, error, page1, page2, profile, user_admin,role,role_menu
+from views import login, error, default, page2, profile, user_admin,role,role_menu
 from apps.tissue.views import crm, topsale, productoverview, salesorderoverview
 from config import conn_security
 
@@ -35,7 +35,7 @@ app.layout = html.Div([
 def displayPage(pathname):
     if pathname == '/':
         if current_user.is_authenticated:
-            return page1.layout
+            return default.layout
         else:
             return login.layout
 
@@ -46,11 +46,12 @@ def displayPage(pathname):
         else:
             return login.layout
 
-    # if pathname.lower() == '/page1':
-    #     if current_user.is_authenticated:
-    #         return topsale.top_sale
-    #     else:
-    #         return login.layout
+    if pathname.lower() == '/default':
+        if current_user.is_authenticated:
+            return default.layout
+        else:
+            return login.layout
+        
     if pathname.lower() == '/page3':
         if current_user.is_authenticated:
             return crm.crm_dash

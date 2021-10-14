@@ -1,14 +1,14 @@
 # import dash_core_components as dcc
 # import dash_html_components as html
 # import dash_table as dt
-from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
+from dash import html, dcc, dash_table
 
 import dash_bootstrap_components as dbc
 
 from dash.dependencies import Input, Output, State
 
 from app import app
-from users_mgt import show_users, add_user
+from configuration.users_mgt import show_users, add_user
 
 
 layout = dbc.Container([

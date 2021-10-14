@@ -4,11 +4,11 @@ import plotly.express as px
 import pandas as pd
 from datetime import date
 # import dash_table
-from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
+from dash import html, dcc, dash_table, Input, Output
 
 from app import app
 from config import conn_tissue
-from dropdown_mgt import show_divisions, division_wise_areas, area_wise_territory, area_wise_parties
+from configuration.dropdown_mgt import show_divisions
 
 today = date.today()
 bl = 3
