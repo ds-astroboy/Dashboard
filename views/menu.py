@@ -29,9 +29,9 @@ layout = dbc.Container([
             )], md=4),
            html.Br(),
             dbc.Col([
-                dbc.Label('Role: '),
+                dbc.Label('Menu: '),
                 dcc.Input(
-                    id='newRolename',
+                    id='newMenuname',
                     className='form-control',
                     n_submit=0,
                     style={
@@ -48,20 +48,20 @@ layout = dbc.Container([
                     html.Br(),
                     html.Br(),
                     html.Button(
-                        children='Create Role',
-                        id='createRoleButton',
+                        children='Create Menu',
+                        id='createMenuButton',
                         n_clicks=0,
                         type='submit',
                         className='btn btn-primary btn-lg'
                     ),
                     html.Br(),
-                    html.Div(id='createRoleSuccess')
+                    html.Div(id='createMenuSuccess')
                 ], md=4),
         ])
     ], className='jumbotron'),
 
     dbc.Container([
-        html.H3('View Roles'),
+        html.H3('View Menus'),
         html.Hr(),
         dbc.Row([
             dbc.Col([
@@ -79,18 +79,18 @@ layout = dbc.Container([
 ])
 
 # CREATE ROLE BUTTON CLICK / FORM SUBMIT - VALIDATE ROLENAME
-@app.callback(Output('newRolename', 'className'),
+@app.callback(Output('newMenuname', 'className'),
               [
-              Input('createRoleButton', 'n_clicks'),
-              Input('newRolename', 'n_submit')
+              Input('createMenuButton', 'n_clicks'),
+              Input('newMenuname', 'n_submit')
               ],
-              [State('newRolename', 'value')])
+              [State('newMenuname', 'value')])
 
-def validateRolename(n_clicks, rolenameSubmit,newRolename):
+def validateMenuname(n_clicks, menunameSubmit,newMenuename):
 
-    if (n_clicks > 0) or (rolenameSubmit > 0):
+    if (n_clicks > 0) or (menunameSubmit > 0):
 
-        if newRolename == None or newRolename == '':
+        if newMenuename == None or newMenuename == '':
             return 'form-control is-invalid'
         else:
             return 'form-control is-valid'
@@ -113,11 +113,11 @@ def validateRolename(n_clicks, rolenameSubmit,newRolename):
 #     else:
 #         return 'form-control'
 
-@app.callback(Output('createRoleSuccess', 'children'),
-              [Input('createRoleButton', 'n_clicks'),
-              Input('newRolename', 'n_submit'),
+@app.callback(Output('createMenuSuccess', 'children'),
+              [Input('createMenuButton', 'n_clicks'),
+              Input('newMenuname', 'n_submit'),
               Input('company_dropdown', 'n_submit'),
-              State('newRolename', 'value'),
+              State('newMenuname', 'value'),
               State('company_dropdown', 'value')
                ])
 
