@@ -1,3 +1,3 @@
 
 [database]
-con = mssql+pyodbc:///?odbc_connect=DRIVER={SQL Server Native Client 11.0};SERVER=10.10.83.69;DATABASE=DashSecurity;UID=sa;PWD=pass@123
+con = mssql+pyodbc:///?odbc_connect=DRIVER={SQL Server Native Client 11.0};SERVER=10.10.83.69;DATABASE=DashSecurity;UID=sa;PWD=Root@pass1
