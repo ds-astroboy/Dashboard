@@ -3,7 +3,6 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 from datetime import date
-# import dash_table
 from dash import html, dcc, dash_table, Input, Output
 
 from app import app
