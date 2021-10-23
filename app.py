@@ -5,13 +5,20 @@ import os
 from flask_login import LoginManager, UserMixin
 from configuration.users_mgt import db, User as base
 from config import config
+from flask import Flask
 
 
-app = dash.Dash(__name__)
-server = app.server
+#https://stackoverflow.com/questions/60322634/deploy-plotly-dash-on-iis
+
+# app = dash.Dash(__name__)
+# server = app.server
+# app.config.suppress_callback_exceptions = True
+
+server = Flask(__name__)
+app = dash.Dash(server=server)
 app.config.suppress_callback_exceptions = True
 
-# config
+# db.init_app(server)
 
 server.config.update(
     SECRET_KEY=os.urandom(12),
@@ -35,10 +42,9 @@ class User(UserMixin, base):
         self.fullname = fullname
         self.admin = admin
 
-
-
 # callback to reload the user object
 @login_manager.user_loader
 def load_user(user_id):
     usr = User.query.get(int(user_id))
     return User(usr.id, usr.username, usr.email, usr.fullname, usr.admin)
+

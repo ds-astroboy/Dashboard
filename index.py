@@ -1,14 +1,12 @@
 
 from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
-
 import dash_bootstrap_components as dbc
 
-from app import app
+from app import app, server
 from flask_login import logout_user, current_user
 from views import login, error, default, page2, profile, user_admin,role,role_menu
 from apps.tissue.views import crm, topsale, productoverview, salesorderoverview
 from config import conn_security
-
 
 navBar = dbc.Navbar(id='navBar',
     children=[],
@@ -16,7 +14,6 @@ navBar = dbc.Navbar(id='navBar',
     color='primary',
     className='navbar navbar-expand-lg navbar-dark bg-primary',
 )
-
 
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -105,7 +102,6 @@ def displayPage(pathname):
 
     else:
         return error.layout
-
 
 ################################################################################
 @app.callback(
@@ -223,48 +219,10 @@ def navBar(input1):
                         ],
                     ),
                 ]
-            # navBarContents = [
-            #     # dbc.NavItem(dbc.NavLink('Page 1', href='/page1')),
-            #     # dbc.NavItem(dbc.NavLink('Page 2', href='/page2')),
-            #     dbc.DropdownMenu(
-            #         nav=True,
-            #         in_navbar=True,
-            #         label='BAPL',
-            #         children=[
-            #             dbc.DropdownMenuItem('Top Sales', href='/page1'),
-            #             # dbc.DropdownMenuItem('Admin', href='/admin'),
-            #             # dbc.DropdownMenuItem(divider=True),
-            #             # dbc.DropdownMenuItem('Logout', href='/logout'),
-            #         ],
-            #     ),
-            #     dbc.DropdownMenu(
-            #         nav=True,
-            #         in_navbar=True,
-            #         label='Tissue',
-            #         children=[
-            #             dbc.DropdownMenuItem('Category Wise Sales', href='/page2'),
-            #             # dbc.DropdownMenuItem('Admin', href='/admin'),
-            #             # dbc.DropdownMenuItem(divider=True),
-            #             # dbc.DropdownMenuItem('Logout', href='/logout'),
-            #         ],
-            #     ),
-            #     dbc.DropdownMenu(
-            #         nav=True,
-            #         in_navbar=True,
-            #         label=current_user.username,
-            #         children=[
-            #             dbc.DropdownMenuItem('Profile', href='/profile'),
-            #             dbc.DropdownMenuItem(divider=True),
-            #             dbc.DropdownMenuItem('Logout', href='/logout'),
-            #         ],
-            #     ),
-            # ]
             return navBarContents
 
     else:
         return ''
 
-
-
 if __name__ == '__main__':
-    app.run_server(debug=True,port=3000)
+    app.run_server()
