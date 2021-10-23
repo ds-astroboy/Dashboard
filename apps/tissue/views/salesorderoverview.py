@@ -14,8 +14,14 @@ from configuration.dropdown_mgt import show_divisions
 today = date.today()
 bl = 3
 
-sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {bl}'
-df = pd.read_sql(sql, conn_tissue)
+#
+# sql = f'select * from DBWareHouse'
+# df = pd.read_sql(sql, conn_tissue)
+
+division_values = show_divisions()
+for item in division_values[0].items():
+    default_value = item[1]
+
 
 layout = html.Div([
     # html.Br(),
@@ -35,8 +41,9 @@ layout = html.Div([
                                 style={
                                     'width': '90%'
                                 },
-                                options=show_divisions(),
+                                options=division_values,
                                 clearable=False,
+                                value=default_value,
                                 placeholder="ALL"
                             )], md=2),
                         dbc.Col([
@@ -123,6 +130,8 @@ layout = html.Div([
 ])
 
 @app.callback(
+    Output('bargraph_party', 'figure'),
+    Output('bargraph_executive', 'figure'),
     Output('datatable', 'columns'),
     Output('datatable', 'data'),
     Output('datatableParty', 'columns'),
@@ -133,15 +142,22 @@ layout = html.Div([
     Input('start_date', 'date'),
     Input('end_date', 'date'),
 )
-def update_summary_data(division_dropdown_value, start_date, end_date):
+def update_salesorderoverview_graph(division_dropdown_value, start_date, end_date):
+    figure_party = {}
+    figure_executive = {}
     summary_data = []
-    df1 = df.loc[(df['OrderDate'] >= start_date) & (df['OrderDate'] <= end_date)]
-    if division_dropdown_value:
-        df2 = df1.loc[df['MarketChannel_Id'] == division_dropdown_value]
-    else:
-        df2 = df1
+    start_date = "'{}'".format(start_date)
+    end_date = "'{}'".format(end_date)
+    sql = f'select  * from DBWareHouse where MarketChannel_Id = {division_dropdown_value} and OrderDate >= {start_date}  and OrderDate <= {end_date}'
+    df2 = pd.read_sql_query(sql, conn_tissue)
 
     if not df2.empty:
+        df3 = df2.groupby(["PartyName"], as_index=False)["TotalOrderQty"].sum().sort_values("TotalOrderQty", ascending=False).head(10)
+        figure_party = px.bar(df3, x='PartyName', y='TotalOrderQty', color='PartyName', height=300)
+
+        df4 = df2.groupby(["ExecutiveName"], as_index=False)["TotalOrderQty"].sum().sort_values("TotalOrderQty", ascending=False).head(10)
+        figure_executive = px.bar(df4, x='ExecutiveName', y='TotalOrderQty', color='ExecutiveName', height=300)
+
         order_count = df2["Code"].nunique()
         total_sales_amount = df2["TotalOrderPrice"].sum()
         total_order_qty = df2["TotalOrderQty"].sum()
@@ -153,32 +169,7 @@ def update_summary_data(division_dropdown_value, start_date, end_date):
                              "Total Remaining Qty": '{0:.2f}'.format(total_remaining_qty)
                              })
         df_table = pd.DataFrame(list(summary_data))
-        df3 = df2.groupby(['PartyName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
-        df4 = df2.groupby(['ExecutiveName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
+        df3 = df2.groupby(['PartyName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]] #["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
+        df4 = df2.groupby(['ExecutiveName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
 
-    return [{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'), [{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')
-
-
-@app.callback(
-    Output('bargraph_party', 'figure'),
-    Output('bargraph_executive', 'figure'),
-    Input('division_dropdown', 'value'),
-    Input('start_date', 'date'),
-    Input('end_date', 'date'),
-)
-def update_salesorderoverview_graph(division_dropdown_value, start_date, end_date):
-    figure_party = {}
-    figure_executive = {}
-    df1 = df.loc[(df['OrderDate'] >= start_date) & (df['OrderDate'] <= end_date)]
-    if division_dropdown_value:
-        df2 = df1.loc[df['MarketChannel_Id'] == division_dropdown_value]
-    else:
-        df2 = df1
-    if not df2.empty:
-        df3 = df2.groupby(["PartyName"], as_index=False)["TotalOrderQty"].sum().sort_values("TotalOrderQty", ascending=False).head(10)
-        figure_party = px.bar(df3, x='PartyName', y='TotalOrderQty', color='PartyName', height=300)
-
-        df4 = df2.groupby(["ExecutiveName"], as_index=False)["TotalOrderQty"].sum().sort_values("TotalOrderQty", ascending=False).head(10)
-        figure_executive = px.bar(df4, x='ExecutiveName', y='TotalOrderQty', color='ExecutiveName', height=300)
-
-    return figure_party, figure_executive
+    return figure_party, figure_executive,[{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'),[{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')

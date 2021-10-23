@@ -13,8 +13,12 @@ from configuration.dropdown_mgt import show_divisions
 today = date.today()
 bl = 3
 
-sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {bl}'
-df = pd.read_sql(sql, conn_tissue)
+# sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {bl}'
+# df = pd.read_sql(sql, conn_tissue)
+
+division_values = show_divisions()
+for item in division_values[0].items():
+    default_value = item[1]
 
 layout = html.Div([
     # html.Br(),
@@ -34,8 +38,9 @@ layout = html.Div([
                                 style={
                                     'width': '90%'
                                 },
-                                options=show_divisions(),
+                                options=division_values,
                                 clearable=False,
+                                value=default_value,
                                 placeholder="ALL"
                             )], md=2),
 
@@ -124,6 +129,8 @@ layout = html.Div([
 
 
 @app.callback(
+    Output('bargraph_category', 'figure'),
+    Output('bargraph_product', 'figure'),
     Output('datatablesummary', 'columns'),
     Output('datatablesummary', 'data'),
     Output('datatableCategory', 'columns'),
@@ -134,53 +141,31 @@ layout = html.Div([
     Input('start_date', 'date'),
     Input('end_date', 'date'),
 )
-def update_summary_data(division_dropdown_value, start_date, end_date):
-    summary_data = []
-    df_table = pd.DataFrame()
-    df1 = df.loc[(df['OrderDate'] >= start_date) & (df['OrderDate'] <= end_date)]
-    if division_dropdown_value:
-        df2 = df1.loc[df['MarketChannel_Id'] == division_dropdown_value]
-    else:
-        df2 = df1
-
-    if not df2.empty:
-        order_count = df2["Code"].nunique()
-        total_sales_amount = df2["TotalOrderPrice"].sum()
-        total_order_qty = df2["TotalOrderQty"].sum()
-        total_remaining_qty = df2["RemainingQty"].sum()
-
-        summary_data.append({"Total Order": order_count,
-                             "Total Sales Amount": '{0:.2f}'.format(total_sales_amount),
-                             "Total Order Qty": '{0:.2f}'.format(total_order_qty),
-                             "Total Remaining Qty": '{0:.2f}'.format(total_remaining_qty)
-                             })
-        df_table = pd.DataFrame(summary_data)
-        df3 = df2.groupby(['ProductCategoryName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply( lambda x: x.sum())
-        df4 = df2.groupby(['ProductName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
-
-    return [{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'), [{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')
-
-
-@app.callback(
-    Output('bargraph_category', 'figure'),
-    Output('bargraph_product', 'figure'),
-    Input('division_dropdown', 'value'),
-    Input('start_date', 'date'),
-    Input('end_date', 'date'),
-)
 def update_salesorder_graph(division_dropdown_value, start_date, end_date):
     figure_category = {}
     figure_product = {}
-    df1 = df.loc[(df['OrderDate'] >= start_date) & (df['OrderDate'] <= end_date)]
-    if division_dropdown_value:
-        df2 = df1.loc[df['MarketChannel_Id'] == division_dropdown_value]
-    else:
-        df2 = df1
+    summary_data = []
+    start_date = "'{}'".format(start_date)
+    end_date = "'{}'".format(end_date)
+    sql = f'select  * from DBWareHouse where MarketChannel_Id = {division_dropdown_value} and OrderDate >= {start_date}  and OrderDate <= {end_date}'
+    df2 = pd.read_sql_query(sql, conn_tissue)
     if not df2.empty:
         df3 = df2.groupby(["ProductCategoryName"], as_index=False)["TotalOrderPrice"].sum()
         figure_category = px.bar(df3, x='ProductCategoryName', y='TotalOrderPrice', color="ProductCategoryName", height=300)
 
+        order_count = df2["Code"].nunique()
+        total_sales_amount = df2["TotalOrderPrice"].sum()
+        total_order_qty = df2["TotalOrderQty"].sum()
+        total_remaining_qty = df2["RemainingQty"].sum()
         df4 = df2.groupby(["ProductName"], as_index=False)["TotalOrderPrice"].sum().sort_values("TotalOrderPrice", ascending=False).head(10)
         figure_product = px.bar(df4, x='ProductName', y='TotalOrderPrice', color="ProductName", height=300)
+        summary_data.append({"Total Order": order_count,
+                                     "Total Sales Amount": '{0:.2f}'.format(total_sales_amount),
+                                     "Total Order Qty": '{0:.2f}'.format(total_order_qty),
+                                     "Total Remaining Qty": '{0:.2f}'.format(total_remaining_qty)
+                                     })
+        df_table = pd.DataFrame(summary_data)
+        df3 = df2.groupby(['ProductCategoryName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply( lambda x: x.sum())
+        df4 = df2.groupby(['ProductName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
 
-    return figure_category, figure_product
+    return figure_category, figure_product,[{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'), [{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')
