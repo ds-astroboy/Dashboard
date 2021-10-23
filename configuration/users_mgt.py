@@ -68,28 +68,3 @@ def show_users():
 
     return users
 
-# class Company(db.Model):
-#     CompanyId = db.Column(db.Integer, primary_key=True)
-#     CompanyShortName = db.Column(db.String(15))
-#     CompanyName = db.Column(db.String(50))
-#
-# companyTable = Table('company', Company.metadata)
-#
-# def show_all_company():
-#     select_stmt = select([companyTable.c.CompanyId,
-#                         companyTable.c.CompanyShortName,
-#                         companyTable.c.CompanyName
-#                         ])
-#
-#     conn = engine.connect()
-#     results = conn.execute(select_stmt)
-#     companyList = []
-#     for result in results:
-#         companyList.append({
-#             'CompanyId': result[0],
-#             'CompanyShortName': result[1],
-#             'CompanyName': result[2]
-#         })
-#
-#     conn.close()
-#     return companyList
