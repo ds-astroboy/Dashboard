@@ -147,8 +147,9 @@ def update_salesorder_graph(division_dropdown_value, start_date, end_date):
     summary_data = []
     start_date = "'{}'".format(start_date)
     end_date = "'{}'".format(end_date)
-    sql = f'select  * from DBWareHouse where MarketChannel_Id = {division_dropdown_value} and OrderDate >= {start_date}  and OrderDate <= {end_date}'
+    sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {bl}, @MarketChannel_Id = {division_dropdown_value}, @FromDate = {start_date}, @ToDate = {end_date}'
     df2 = pd.read_sql_query(sql, conn_tissue)
+
     if not df2.empty:
         df3 = df2.groupby(["ProductCategoryName"], as_index=False)["TotalOrderPrice"].sum()
         figure_category = px.bar(df3, x='ProductCategoryName', y='TotalOrderPrice', color="ProductCategoryName", height=300)
@@ -165,7 +166,7 @@ def update_salesorder_graph(division_dropdown_value, start_date, end_date):
                                      "Total Remaining Qty": '{0:.2f}'.format(total_remaining_qty)
                                      })
         df_table = pd.DataFrame(summary_data)
-        df3 = df2.groupby(['ProductCategoryName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply( lambda x: x.sum())
-        df4 = df2.groupby(['ProductName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
+        df3 = df2.groupby(['ProductCategoryName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
+        df4 = df2.groupby(['ProductName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
 
     return figure_category, figure_product,[{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'), [{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')

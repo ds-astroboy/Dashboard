@@ -148,9 +148,8 @@ def update_salesorderoverview_graph(division_dropdown_value, start_date, end_dat
     summary_data = []
     start_date = "'{}'".format(start_date)
     end_date = "'{}'".format(end_date)
-    sql = f'select  * from DBWareHouse where MarketChannel_Id = {division_dropdown_value} and OrderDate >= {start_date}  and OrderDate <= {end_date}'
+    sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {bl}, @MarketChannel_Id = {division_dropdown_value}, @FromDate = {start_date}, @ToDate = {end_date}'
     df2 = pd.read_sql_query(sql, conn_tissue)
-
     if not df2.empty:
         df3 = df2.groupby(["PartyName"], as_index=False)["TotalOrderQty"].sum().sort_values("TotalOrderQty", ascending=False).head(10)
         figure_party = px.bar(df3, x='PartyName', y='TotalOrderQty', color='PartyName', height=300)
