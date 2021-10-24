@@ -8,7 +8,7 @@ import pandas as pd
 from app import app
 from configuration.dropdown_mgt import show_divisions
 from common.dateinfo import *
-from apps.tissue.data.model import get_sales_Dash_data
+from apps.tissue.model.models import get_sales_Dash_data
 
 
 # division_values = show_divisions()
