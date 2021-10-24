@@ -2,25 +2,18 @@
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 import plotly.express as px
-import pandas as pd
 from dash.dependencies import Input, Output
-from datetime import date
-
+import pandas as pd
 
 from app import app
-from config import conn_tissue
 from configuration.dropdown_mgt import show_divisions
+from common.dateinfo import *
+from apps.tissue.data.model import get_sales_Dash_data
 
-today = date.today()
-bl = 3
 
-#
-# sql = f'select * from DBWareHouse'
-# df = pd.read_sql(sql, conn_tissue)
-
-division_values = show_divisions()
-for item in division_values[0].items():
-    default_value = item[1]
+# division_values = show_divisions()
+# for item in division_values[0].items():
+#     default_value = item[1]
 
 
 layout = html.Div([
@@ -41,9 +34,9 @@ layout = html.Div([
                                 style={
                                     'width': '90%'
                                 },
-                                options=division_values,
+                                options=show_divisions(),
                                 clearable=False,
-                                value=default_value,
+                                # value=default_value,
                                 placeholder="ALL"
                             )], md=2),
                         dbc.Col([
@@ -51,7 +44,7 @@ layout = html.Div([
                             html.Div(style={'fontSize': 10},
                                      children=dcc.DatePickerSingle(
                                          id='start_date',
-                                         date=date(2016, 1, 1)
+                                         date=start_day_of_prev_month
                                      ),
                                      )
                         ], md=2),
@@ -60,7 +53,7 @@ layout = html.Div([
                             html.Div(style={'fontSize': 10},
                                      children=dcc.DatePickerSingle(
                                          id='end_date',
-                                         date=today
+                                         date=last_day_of_prev_month
                                      ),
                                      )
                         ], md=2),
@@ -146,10 +139,7 @@ def update_salesorderoverview_graph(division_dropdown_value, start_date, end_dat
     figure_party = {}
     figure_executive = {}
     summary_data = []
-    start_date = "'{}'".format(start_date)
-    end_date = "'{}'".format(end_date)
-    sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {bl}, @MarketChannel_Id = {division_dropdown_value}, @FromDate = {start_date}, @ToDate = {end_date}'
-    df2 = pd.read_sql_query(sql, conn_tissue)
+    df2 = get_sales_Dash_data(division_dropdown_value, start_date, end_date)
     if not df2.empty:
         df3 = df2.groupby(["PartyName"], as_index=False)["TotalOrderQty"].sum().sort_values("TotalOrderQty", ascending=False).head(10)
         figure_party = px.bar(df3, x='PartyName', y='TotalOrderQty', color='PartyName', height=300)
@@ -170,5 +160,4 @@ def update_salesorderoverview_graph(division_dropdown_value, start_date, end_dat
         df_table = pd.DataFrame(list(summary_data))
         df3 = df2.groupby(['PartyName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]] #["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
         df4 = df2.groupby(['ExecutiveName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
-
     return figure_party, figure_executive,[{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'),[{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')
