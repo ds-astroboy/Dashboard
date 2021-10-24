@@ -158,6 +158,6 @@ def update_salesorderoverview_graph(division_dropdown_value, start_date, end_dat
                              "Total Remaining Qty": '{0:.2f}'.format(total_remaining_qty)
                              })
         df_table = pd.DataFrame(list(summary_data))
-        df3 = df2.groupby(['PartyName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]] #["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].apply(lambda x: x.sum())
+        df3 = df2.groupby(['PartyName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
         df4 = df2.groupby(['ExecutiveName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
     return figure_party, figure_executive,[{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'),[{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')
