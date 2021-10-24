@@ -15,7 +15,6 @@ from apps.tissue.data.model import get_sales_Dash_data
 # for item in division_values[0].items():
 #     default_value = item[1]
 
-
 layout = html.Div([
     # html.Br(),
     dbc.Row([
