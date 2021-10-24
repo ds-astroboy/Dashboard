@@ -151,7 +151,6 @@ def navBar(input1):
             navBarContents = [
                      tisse_menu,
                      config_menu,
-                     # menu_list,
                     dbc.DropdownMenu(
                         nav=True,
                         in_navbar=True,
