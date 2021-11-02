@@ -10,13 +10,13 @@ from flask import Flask
 
 #https://stackoverflow.com/questions/60322634/deploy-plotly-dash-on-iis
 
-# app = dash.Dash(__name__)
-# server = app.server
-# app.config.suppress_callback_exceptions = True
-
-server = Flask(__name__)
-app = dash.Dash(server=server)
+app = dash.Dash(__name__)
+server = app.server
 app.config.suppress_callback_exceptions = True
+
+# server = Flask(__name__)
+# app = dash.Dash(server=server)
+# app.config.suppress_callback_exceptions = True
 
 # db.init_app(server)
 

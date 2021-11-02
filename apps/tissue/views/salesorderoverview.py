@@ -11,9 +11,9 @@ from common.dateinfo import *
 from apps.tissue.model.models import get_sales_Dash_data
 
 
-# division_values = show_divisions()
-# for item in division_values[0].items():
-#     default_value = item[1]
+division_values = show_divisions()
+for item in division_values[1].items():
+    default_value = item[1]
 
 layout = html.Div([
     # html.Br(),
@@ -33,17 +33,18 @@ layout = html.Div([
                                 style={
                                     'width': '90%'
                                 },
-                                options=show_divisions(),
+                                options=division_values,
                                 clearable=False,
-                                # value=default_value,
-                                placeholder="ALL"
+                                value=default_value,
+                                # placeholder="ALL"
                             )], md=2),
                         dbc.Col([
                             dbc.Label('Start Date: '),
                             html.Div(style={'fontSize': 10},
                                      children=dcc.DatePickerSingle(
                                          id='start_date',
-                                         date=start_day_of_prev_month
+                                         # date=start_day_of_prev_month
+                                         date='2021-07-01'
                                      ),
                                      )
                         ], md=2),
@@ -157,6 +158,6 @@ def update_salesorderoverview_graph(division_dropdown_value, start_date, end_dat
                              "Total Remaining Qty": '{0:.2f}'.format(total_remaining_qty)
                              })
         df_table = pd.DataFrame(list(summary_data))
-        df3 = df2.groupby(['PartyName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
-        df4 = df2.groupby(['ExecutiveName'], as_index=False).sum()[["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"]]
-    return figure_party, figure_executive,[{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'),[{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')
+        df3 = df2.groupby(['PartyName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].sum().sort_values("TotalOrderQty", ascending=False)
+        df4 = df2.groupby(['ExecutiveName'], as_index=False)["TotalOrderQty", "TotalDeliveredQty", "RemainingQty"].sum().sort_values("TotalOrderQty", ascending=False)
+        return figure_party, figure_executive,[{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'),[{"name": i, "id": i} for i in df3.columns], df3.to_dict('records'), [{"name": i, "id": i} for i in df4.columns], df4.to_dict('records')

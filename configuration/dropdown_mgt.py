@@ -1,15 +1,18 @@
 
-from config import conn_tissue
+from config import *
 
+businessline_id = 3
 def show_divisions():
     division_dropdown_data = []
+    division_dropdown_data.append({'Id': 0, 'Name': "ALL"})
     cursor = conn_tissue.cursor()
-    sql = "select Id,Name from Market_Channels where Market_Channel_Id is null and IsActive = 1 and BusinessLine_Id = 3"
+    sql = f"select Id,Name from Market_Channels where Market_Channel_Id is null and IsActive = 1 and BusinessLine_Id = {businessline_id}"
     cursor.execute(sql)
     result = cursor.fetchall()
+    print(result)
     _result = list(result)
     for index, item in _result:
-        division_dropdown_data.append({'label': item, 'value':  int(index)})
+        division_dropdown_data.append({'Id': int(index), 'Name':  item})
     return division_dropdown_data
 
 def division_wise_areas(division_id = 0):

@@ -3,6 +3,8 @@ from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pyodbc
 
+businessline_id = 3
+
 config = configparser.ConfigParser()
 config.read('config.txt')
 engine = create_engine(config.get('database', 'con'))
