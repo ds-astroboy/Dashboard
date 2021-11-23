@@ -5,11 +5,11 @@ from dash import html, dcc, dash_table, Input, Output
 import pandas as pd
 
 from app import app
-from configuration.dropdown_mgt import show_divisions
+from configuration.dropdown_mgt import get_divisions
 from apps.tissue.model.models import get_sales_Dash_data
 from common.dateinfo import *
 
-division_values = show_divisions()
+division_values = get_divisions()
 for item in division_values[1].items():
     default_value = item[1]
 
@@ -42,8 +42,8 @@ layout = html.Div([
                             html.Div(style={'fontSize': 10},
                                      children=dcc.DatePickerSingle(
                                          id='start_date',
-                                         # date=start_day_of_prev_month
-                                         date='2021-07-01'
+                                         date=start_day_of_prev_month
+                                         # date='2021-07-01'
                                      ),
                                      )
                         ], md=2),

@@ -68,7 +68,7 @@ def sucess(n_clicks, usernameSubmit, passwordSubmit, username, password):
     if user:
         if check_password_hash(user.password, password):
             login_user(user)
-            return '/page1'
+            return '/dashboard'
         else:
             pass
     else:

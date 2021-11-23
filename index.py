@@ -1,12 +1,14 @@
 
-from dash import Dash, callback, html, dcc, dash_table, Input, Output, State, MATCH, ALL
+from dash import html, dcc, Input, Output
 import dash_bootstrap_components as dbc
 
 from app import app, server
 from flask_login import logout_user, current_user
-from views import login, error, default, page2, profile, user_admin,role,role_menu
-from apps.tissue.views import crm, topsale, productoverview, salesorderoverview
+from views import login, error, default, page2, profile, user_admin, role, role_menu
+from apps.tissue.views import test, productoverview, salesorderoverview, productstocksummary, executiveattendance, dashboard,topsale, customdashboard
 from config import conn_security
+
+# https://auth0.com/docs/quickstart/backend/python/01-authorization#configure-auth0-apis
 
 navBar = dbc.Navbar(id='navBar',
     children=[],
@@ -43,22 +45,22 @@ def displayPage(pathname):
         else:
             return login.layout
 
-    if pathname.lower() == '/page1':
+    if pathname.lower() == '/dashboard':
         if current_user.is_authenticated:
-            return default.layout
+            return dashboard.layout
         else:
             return login.layout
         
-    if pathname.lower() == '/page3':
-        if current_user.is_authenticated:
-            return crm.crm_dash
-        else:
-            return login.layout
-    if pathname == '/page2':
-        if current_user.is_authenticated:
-            return crm.crm_dash
-        else:
-            return login.layout
+    # if pathname.lower() == '/page3':
+    #     if current_user.is_authenticated:
+    #         return crm.crm_dash
+    #     else:
+    #         return login.layout
+    # if pathname == '/page2':
+    #     if current_user.is_authenticated:
+    #         return crm.crm_dash
+    #     else:
+    #         return login.layout
 
     if pathname == '/role':
         if current_user.is_authenticated:
@@ -84,6 +86,35 @@ def displayPage(pathname):
         else:
             return login.layout
 
+    if pathname == '/productstocksummary':
+        if current_user.is_authenticated:
+            return productstocksummary.layout
+        else:
+            return login.layout
+
+    if pathname == '/executiveattendance':
+        if current_user.is_authenticated:
+            return executiveattendance.layout
+        else:
+            return login.layout
+
+    if pathname == '/dashboard':
+        if current_user.is_authenticated:
+            return dashboard.layout
+        else:
+            return login.layout
+
+    if pathname == '/customdashboard':
+        if current_user.is_authenticated:
+            return customdashboard.layout
+        else:
+            return login.layout
+
+    if pathname == '/topsale':
+        if current_user.is_authenticated:
+            return topsale.layout
+        else:
+            return login.layout
     if pathname == '/profile':
         if current_user.is_authenticated:
             return profile.layout
@@ -98,7 +129,6 @@ def displayPage(pathname):
                 return error.layout
         else:
             return login.layout
-
 
     else:
         return error.layout
@@ -120,11 +150,11 @@ def navBar(input1):
             cursor = conn_security.cursor()
             stored_proc = f"exec spGetUserMenu @Id = {user_id}"
             cursor.execute(stored_proc)
-            result = cursor.fetchall()
-            user_menus = list(result)
+            result = list(cursor.fetchall())
+            # user_menus = list(result)
 
 
-            for item in user_menus:
+            for item in result:
                 if item[6] == 'Config':
                     appended_item = dbc.DropdownMenuItem('{}'.format(item[7]), href='{}'.format(item[8]))
                     child_Config.append(appended_item)
@@ -224,4 +254,4 @@ def navBar(input1):
         return ''
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug=True)

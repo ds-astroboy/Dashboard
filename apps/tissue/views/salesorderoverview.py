@@ -6,12 +6,13 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 from app import app
-from configuration.dropdown_mgt import show_divisions
+from configuration.dropdown_mgt import get_divisions, get_all_divisions
 from common.dateinfo import *
 from apps.tissue.model.models import get_sales_Dash_data
 
 
-division_values = show_divisions()
+division_values = get_divisions()
+divisions = get_all_divisions()
 for item in division_values[1].items():
     default_value = item[1]
 
@@ -31,20 +32,18 @@ layout = html.Div([
                             dcc.Dropdown(
                                 id='division_dropdown',
                                 style={
-                                    'width': '90%'
+                                    'width': '90%',
                                 },
                                 options=division_values,
                                 clearable=False,
                                 value=default_value,
-                                # placeholder="ALL"
                             )], md=2),
                         dbc.Col([
                             dbc.Label('Start Date: '),
                             html.Div(style={'fontSize': 10},
                                      children=dcc.DatePickerSingle(
                                          id='start_date',
-                                         # date=start_day_of_prev_month
-                                         date='2021-07-01'
+                                          date=start_day_of_prev_month
                                      ),
                                      )
                         ], md=2),
@@ -62,7 +61,7 @@ layout = html.Div([
                         ], md=1),
                     ]),
                 ], className='card-body')
-            ], className='card bg-light mb-3', style={'text-align': 'center'})
+            ], className='create_container', style={'text-align': 'center'})
         ], md=12),
         # dbc.Col([
         # ], md=1),
@@ -74,7 +73,6 @@ layout = html.Div([
                 html.H4('Overall Sales Order', className='card-header bg-info'),
             ], style={'text-align': 'center'}),
             html.Div([dash_table.DataTable(id='datatable',
-                                           # columns=[ {"name": i, "id": i} for i in sorted(df8.columns)],
                                            data=[],
                                            )], style={'font-weight': 'bold'})
         ])
