@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import pyodbc
 
 businessline_id = 3
-
+division_type_id = 21
 config = configparser.ConfigParser()
 config.read('config.txt')
 engine = create_engine(config.get('database', 'con'))
