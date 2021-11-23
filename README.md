@@ -5,7 +5,6 @@ This web app is a great data visualization tool for showing data on cloud based 
 
 Example of app in action with a layout on sales order:
 
-![](dashboard.PNG)
-
+![](/images/dashboard.PNG)
 
 
