@@ -473,12 +473,12 @@ def update_dashboard(start_date):
                 color='white')
         ),
     }
-    order_qty = 15000
+    order_qty = total_order_qty
     sa_order = 4565
-    received_qty = 12000
-    delivered_qty = 11000
-    stock_qty = 20000
-    pending_qty = 5000
+    received_qty = 350000
+    delivered_qty = 650000
+    stock_qty = 700000
+    pending_qty = 250000
     stock_colors = ['#4BF7A8', 'orange', 'green', 'red', 'yellow']
     stock_pie = {
         'data': [go.Pie(labels=['Order', 'Received', 'Delivered', 'Pending', 'Stock'],
