@@ -14,6 +14,7 @@ from common.dateinfo import *
 # https://dash.plotly.com/dash-core-components/graph
 # https://pbpython.com/plotly-dash-intro.html
 # https://bootswatch.com/flatly/
+# https://www.oreilly.com/library/view/architecture-patterns-with/9781492052197/ch04.html
 
 division_values = get_divisions()
 default_value = 0
@@ -63,7 +64,7 @@ layout = html.Div([
                                 html.H6('Total Executive',
                                         style={
                                             'text-align': 'left',
-                                            'font-weight': 'bold',
+                                            'font-weight': 300,
                                             'fontSize': 18},
                                         ),
                                 html.P(id="total_executive",
