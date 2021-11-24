@@ -10297,5 +10297,16 @@ a.text-dark:hover, a.text-dark:focus {
 
 .container_top_text_color {
     color: #fd7e14;
-    font-size: 30px
+    font-size: 30px;
+}
+.header_text_size{
+    text-align:left;
+    font-size:25px;
+
+}
+.header_text_value_size{
+    text-align:left;
+    font-size:30px;
+    color: orange;
+
 }
