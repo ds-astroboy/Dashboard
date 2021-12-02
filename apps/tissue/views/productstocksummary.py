@@ -1,53 +1,56 @@
 
 import dash_bootstrap_components as dbc
-import plotly.express as px
 from dash import html, dcc, dash_table, Input, Output
-import pandas as pd
-
+import plotly.graph_objs as go
 
 from app import app
-from configuration.dropdown_mgt import get_divisions
-from apps.tissue.model.models import get_sales_Dash_data, get_product_stock_dash_data
 from common.dateinfo import *
+from service_layer.services import get_service_division_dropdown, get_service_product_stock_data
 
-
-division_values = get_divisions()
 default_value = 0
-for item in division_values[1].items():
-    default_value = item[1]
+division_values = get_service_division_dropdown()
+default_value = division_values[1]['value']
 
 layout = html.Div([
+
     dbc.Row([
         dbc.Col([
             html.Div([
-                html.H4('Product Stock Summary', className='card-header bg-success'),
+                html.H4('Product Stock', style={'fontSize': 30}),
+               ], className='text-white', style={'text-align': 'center'})
+        ]),
+    ]),
+
+    dbc.Row([
+        # dbc.Col([
+        # ], md=1),
+        dbc.Col([
+            html.Div([
                 html.Div([
                     dbc.Row([
                         dbc.Col([], md=3),
                         dbc.Col([
-                            dbc.Label('Division: '),
+                            dbc.Label('Division: ', color="white"),
                             dcc.Dropdown(
                                 id='division_dropdown',
                                 style={
-                                    'width': '90%'
+                                    'width': '90%',
                                 },
                                 options=division_values,
                                 clearable=False,
                                 value=default_value,
                             )], md=2),
-
                         dbc.Col([
-                            dbc.Label('Start Date: '),
+                            dbc.Label('Start Date: ', color="white"),
                             html.Div(style={'fontSize': 10},
                                      children=dcc.DatePickerSingle(
                                          id='start_date',
-                                        date=start_day_of_prev_month
-                                         # date='2021-07-01'
+                                         date=start_day_of_prev_month
                                      ),
                                      )
                         ], md=2),
                         dbc.Col([
-                            dbc.Label('End Date: '),
+                            dbc.Label('End Date: ', color="white"),
                             html.Div(style={'fontSize': 10},
                                      children=dcc.DatePickerSingle(
                                          id='end_date',
@@ -59,8 +62,8 @@ layout = html.Div([
 
                         ], md=1),
                     ]),
-                ], className='card-body')
-            ], className='card bg-light mb-3', style={'text-align': 'center'})
+                ], className='')
+            ], className='create_container', style={'text-align': 'center'})
         ], md=12),
         # dbc.Col([
         # ], md=1),
@@ -68,92 +71,291 @@ layout = html.Div([
 
     dbc.Row([
         dbc.Col([
-            html.Div([
-                html.H4('Overall Sales Order', className='card-header bg-info'),
-            ], style={'text-align': 'center'}),
-            html.Div([dash_table.DataTable(id='datasummary', data=[],)], style={'font-weight': 'bold'})
-        ])
+                html.Div([
+                    html.Div([
+                        html.Div([
+                        dcc.Graph(id='category_pie', figure={})
+                        ], className="create_container")
+                    ]),
+                ], className="text-white"),
+        ], md=4, style={'text-align': 'center'}),
+
+        dbc.Col([
+                html.Div([
+                    html.Div([
+                    # html.Div([
+                    #     dbc.Row([
+                    #         dbc.Col([
+                    #             html.Div([
+                    #                 html.H4('SALES', className="container_top_text_color"),
+                    #             ])
+                    #         ]),
+                    #         dbc.Col([
+                    #             html.Div([
+                    #                 dcc.Link('DETAILS', href='/salesorderoverview', target="_blank",
+                    #                          className="btn btn-primary btn-lg"),
+                    #             ], style={'text-align': 'left'})
+                    #         ])
+                    #     ]),
+                    #     html.Br(),
+                    #     dbc.Row([
+                    #         dbc.Col([
+                    #         html.Div([
+                    #             html.H6('TOTAL ORDER', className="header_text_size"),
+                    #             html.P(id="total_order",   className="header_text_value_size"),
+                    #             html.H6('SALES AMOUNT', className="header_text_size"),
+                    #             html.P(id="total_sales_amount",  className="header_text_value_size"),
+                    #               ]),
+                    #         ]),
+                    #         dbc.Col([
+                    #         html.Div([
+                    #         html.H6('ORDER QUANTITY', className="header_text_size"),
+                    #         html.P(id="total_order_qty",  className="header_text_value_size" ),
+                    #             html.H6('REMAINING', className="header_text_size"),
+                    #             html.P(id="total_remain_qty",  className="header_text_value_size")
+                    #           ]),
+                    #         ]),
+                    #     ]),
+                    #     ], className="create_container"),
+                        html.Div([
+                        dcc.Graph(id='product_bar', figure={})
+                        ], className="create_container")
+                    ]),
+                ], className="text-white"),
+        ], md=8, style={'text-align': 'center'}),
     ]),
-    dbc.Row([
-        dbc.Col([
-            html.Div([
-                html.H4('Order by product category', className='card-header bg-info'),
-                dcc.Graph(id='bargraph_product_category', figure={})], style={'text-align': 'center'})
-        ], md=4),
-        dbc.Col([
-            html.Div([
-                html.H4('Order by party', className='card-header bg-info'),
-                dcc.Graph(id='bargraph_stock_party', figure={})], style={'text-align': 'center'})
-        ], md=4),
-        dbc.Col([
-            html.Div([
-                html.H4('Stock by product category', className='card-header bg-info'),
-                dcc.Graph(id='bargraph_stock_category', figure={})], style={'text-align': 'center'})
-        ], md=4),
-    ]),
-    dbc.Row([
-        dbc.Col([
-            html.Div([
-                html.H4('Stock Status Table', className='card-header bg-info'),
-            ], style={'text-align': 'left'}),
-            dash_table.DataTable(id='dataproduct',
-                                 data=[],
-                                 fixed_rows={'headers': True},
-                                 style_table={'height': 400}
-                                 )
-        ])
-    ])
+     dbc.Row([
+               # https://hexcolor.co/hex/1f2c56    Color picker
+                dbc.Col([
+                  html.Div([
+                    html.Div([
+                        html.H4('Category Stock Info', style={'color': 'white'}),
+                      ], style={'text-align': 'left'}),
+                    dash_table.DataTable(id='category_stock',
+                                         data=[],
+                                         fixed_rows={'headers': True},
+                                         style_table={'height': 400},
+                                         style_header={
+                                                'backgroundColor': '#1f2c56',
+                                                 'color': 'white',
+                                                  'fontWeight': 'bold'
+                                                    },
+                                         style_data_conditional=[{
+                                             'if': {'column_editable': False},
+                                             'backgroundColor': '#1f2c56',
+                                             'color': 'white'
+                                         }],
+                                         )
+                ], className="create_container"),
+                ], md=4, style={'text-align': 'center'}),
+         dbc.Col([
+             html.Div([
+                 html.Div([
+                     html.H4('Product Stock Info', style={'color': 'white'}),
+                 ], style={'text-align': 'left'}),
+                 dash_table.DataTable(id='product_stock',
+                                      data=[],
+                                      fixed_rows={'headers': True},
+                                      style_table={'height': 400},
+                                      style_header={
+                                          'backgroundColor': '#1f2c56',
+                                          'color': 'white',
+                                          'fontWeight': 'bold'
+                                      },
+                                      style_data_conditional=[{
+                                          'if': {'column_editable': False},
+                                          'backgroundColor': '#1f2c56',
+                                          'color': 'white',
+                                      }],
+                                      )
+             ], className="create_container"),
+            ], md=8, style={'text-align': 'center'})
+            ])
 ])
 
 
 @app.callback(
-    Output('bargraph_product_category', 'figure'),
-    Output('bargraph_stock_party', 'figure'),
-    Output('bargraph_stock_category', 'figure'),
-    Output('datasummary', 'columns'),
-    Output('datasummary', 'data'),
-    Output('dataproduct', 'columns'),
-    Output('dataproduct', 'data'),
+    Output('category_pie', 'figure'),
+    Output('product_bar', 'figure'),
+    Output('category_stock', 'columns'),
+    Output('category_stock', 'data'),
+    Output('product_stock', 'columns'),
+    Output('product_stock', 'data'),
+
     Input('division_dropdown', 'value'),
     Input('start_date', 'date'),
     Input('end_date', 'date'),
 )
-def update_salesorder_graph(division_dropdown_value, start_date, end_date):
-    figure_category = {}
-    figure_product = {}
-    figure_product_stock = {}
-    summary_data = []
-    # Stock
-    df5 = get_product_stock_dash_data(division_dropdown_value, start_date, end_date)
-    # Sales
-    df2 = get_sales_Dash_data(division_dropdown_value, start_date, end_date)
-    if not df2.empty:
 
-        # Order by product category
-        df3 = df2.groupby(["ProductCategoryName"], as_index=False)["TotalOrderQty"].sum()
-        figure_category = px.bar(df3, x='ProductCategoryName', y='TotalOrderQty', color="ProductCategoryName", height=300)
+def update_product_dashboard(division_dropdown_value, start_date, end_date):
 
-        # Order by Party
-        df4 = df2.groupby(["PartyName"], as_index=False)["TotalOrderQty", "RemainingQty"].sum().head(20)
-        figure_product = px.pie(df4, names='PartyName', values='TotalOrderQty', color="PartyName", height=300)
+    # Stock by product category
+    df = get_service_product_stock_data(division_dropdown_value, start_date, end_date)
+    if not df.empty:
+        df_stock = df.sort_values(by=["CurrentStock"],  ascending=False).head(100)
+        category_grouped_df = df.groupby(["ProductCategoryName"], as_index=False)["CurrentStock"].sum().sort_values('CurrentStock',  ascending=False).head(15)
+        # category_colors = ['#37F04D', '#3798FA', '#CE67E0', '#F79A65', '#F0E427', '#37B0F0', '#FADD36', '#CE67E0', '#65F799', '#EDA061',  'orange']
+        category_bar = {
+            'data': [go.Bar(x=category_grouped_df['ProductCategoryName'],
+                            y=category_grouped_df['CurrentStock'],
+                            # name='',
+                            marker=dict(color='#37C2FA'),
+                            # hoverinfo='text',
+                            # hovertext=''
 
-        # Stock by product category
-        df6 = df5.groupby(["ProductCategoryName"], as_index=False)["CurrentStock"].sum()
-        figure_product_stock = px.bar(df6, x="ProductCategoryName", y="CurrentStock", color="ProductCategoryName", height=300)
+                            ),
+                     # go.Scatter(x=category_grouped_df['ProductCategoryName'],
+                     #            y=category_grouped_df['CurrentStock'],
+                     #            mode='lines',
+                     #            name='',
+                     #            line=dict(width=3, color='#FF00FF'),
+                     #            marker=dict(
+                     #                color='green'),
+                     #            hoverinfo='text',
+                     #            hovertext=''
+                     #            )
+                     ],
 
-        order_count = df2["Code"].nunique()
-        total_sales_amount = df2["TotalOrderPrice"].sum()
-        total_order_qty = df2["TotalOrderQty"].sum()
-        total_remaining_qty = df2["RemainingQty"].sum()
+            'layout': go.Layout(
+                plot_bgcolor='#1f2c56',
+                paper_bgcolor='#1f2c56',
+                title={
+                    'text': 'Category',
+                    'y': 0.93,
+                    'x': 0.5,
+                    'xanchor': 'center',
+                    'yanchor': 'top'},
+                titlefont={
+                    'color': 'white',
+                    'size': 20},
 
-        summary_data.append({"Total Order": order_count,
-                                     "Total Sales Amount": '{0:.2f}'.format(total_sales_amount),
-                                     "Total Order Qty": '{0:.2f}'.format(total_order_qty),
-                                     "Total Remaining Qty": '{0:.2f}'.format(total_remaining_qty)
-                                     })
-        df_table = pd.DataFrame(summary_data)
-        df_product_stock_summary = df5[["ProductName", "OpeningStock", "ReceivedQty", "DeliveredQty", "CurrentStock"]]
+                hovermode='x',
+                margin=dict(r=0),
+                xaxis=dict(title='Category',
+                           color='white',
+                           showline=True,
+                           showgrid=True,
+                           showticklabels=True,
+                           linecolor='white',
+                           linewidth=2,
+                           ticks='outside',
+                           tickfont=dict(
+                               family='Arial',
+                               size=12,
+                               color='white'
+                           )
 
-    return figure_category, figure_product, figure_product_stock,\
-           [{"name": i, "id": i} for i in df_table.columns], df_table.to_dict('records'),\
-           [{"name": i, "id": i} for i in df_product_stock_summary.columns], df_product_stock_summary.to_dict('records')
+                           ),
+
+                yaxis=dict(title='Current Stock',
+                           color='white',
+                           showline=True,
+                           showgrid=True,
+                           showticklabels=True,
+                           linecolor='white',
+                           linewidth=2,
+                           ticks='outside',
+                           tickfont=dict(
+                               family='Arial',
+                               size=12,
+                               color='white'
+                           )
+
+                           ),
+
+                # legend={
+                #     'orientation': 'h',
+                #     'bgcolor': '#1f2c56',
+                #     'xanchor': 'center', 'x': 0.5, 'y': -0.3},
+                font=dict(
+                    family="sans-serif",
+                    size=12,
+                    color='white'),
+            )
+
+        }
+
+        product_bar = {
+            'data': [go.Bar(x=df_stock['ProductName'],
+                            y=df_stock['CurrentStock'],
+                            name='',
+                            marker=dict(color='orange'),
+                            # hoverinfo='text',
+                            # hovertext=str(stock_df['CurrentStock'])
+                            ),
+                     # go.Scatter(x=category_grouped_df['ProductCategoryName'],
+                     #            y=category_grouped_df['CurrentStock'],
+                     #            mode='lines',
+                     #            name='',
+                     #            line=dict(width=3, color='#FF00FF'),
+                     #            marker=dict(
+                     #                color='green'),
+                     #            hoverinfo='text',
+                     #            hovertext=''
+                     #            )
+                     ],
+
+            'layout': go.Layout(
+                plot_bgcolor='#1f2c56',
+                paper_bgcolor='#1f2c56',
+                title={
+                    'text': 'Product',
+                    'y': 0.93,
+                    'x': 0.5,
+                    'xanchor': 'center',
+                    'yanchor': 'top'},
+                titlefont={
+                    'color': 'white',
+                    'size': 20},
+
+                hovermode='x',
+                margin=dict(r=0),
+                xaxis=dict(title='',
+                           color='white',
+                           showline=True,
+                           showgrid=True,
+                           showticklabels=True,
+                           linecolor='white',
+                           linewidth=2,
+                           ticks='outside',
+                           tickfont=dict(
+                               family='Arial',
+                               size=12,
+                               color='white'
+                           )
+
+                           ),
+
+                yaxis=dict(title='Current Stock',
+                           color='white',
+                           showline=True,
+                           showgrid=True,
+                           showticklabels=True,
+                           linecolor='white',
+                           linewidth=2,
+                           ticks='outside',
+                           tickfont=dict(
+                               family='Arial',
+                               size=12,
+                               color='white'
+                           )
+                           ),
+                legend={
+                    'orientation': 'h',
+                    'bgcolor': '#1f2c56',
+                    'xanchor': 'center', 'x': 0.5, 'y': -0.3},
+                font=dict(
+                    family="sans-serif",
+                    size=12,
+                    color='white'),
+            )
+
+        }
+
+        df_category_stock = category_grouped_df[["ProductCategoryName", "CurrentStock"]]
+        df_category_stock.rename(columns={'ProductCategoryName': 'Category', 'CurrentStock': 'Stock'}, inplace=True)
+        df_product_stock = df_stock[["ProductName", "CurrentStock"]]
+        df_product_stock.rename(columns={'ProductName': 'Product', 'CurrentStock': 'Stock'}, inplace=True)
+
+        return category_bar, product_bar, [{"name": i, "id": i} for i in df_category_stock.columns], df_category_stock.to_dict('records'),\
+               [{"name": i, "id": i} for i in df_product_stock.columns], df_product_stock.to_dict('records')

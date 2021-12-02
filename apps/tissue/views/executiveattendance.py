@@ -8,12 +8,14 @@ import plotly.graph_objs as go
 from app import app
 from configuration.dropdown_mgt import get_divisions, division_wise_areas, area_wise_territory, get_all_divisions
 from apps.tissue.model.models import get_attendance_dash_data, get_all_division_attendance_dash_data, get_executive_count_dash_data
+from service_layer.services import get_service_division_dropdown, get_service_division_wise_area_dropdown,\
+    get_service_executive_count_data, get_service_all_division_attendance_data, get_service_attendance_data
 from common.dateinfo import *
 
 # https://dash.plotly.com/dash-core-components/graph
 # https://pbpython.com/plotly-dash-intro.html
 
-division_values = get_divisions()
+division_values = get_service_division_dropdown()
 default_value = 0
 # for item in division_values[1].items():
 #     default_value = item[1]
@@ -148,16 +150,15 @@ def update_attendance_graph(division_dropdown_value, area_dropdown_value, start_
     figure_attenndance_summary = {}
     exeutive_summary_data = []
     areas = []
-    territory = []
     dropdown_value = 0
     if division_dropdown_value:
-        areas = division_wise_areas(division_dropdown_value)
+        areas = get_service_division_wise_area_dropdown(division_dropdown_value)
 
     # if area_dropdown_value:
     #     territory = area_wise_territory(area_dropdown_value)
 
     if not division_dropdown_value:
-        df = get_all_division_attendance_dash_data(start_date, end_date)
+        df = get_service_all_division_attendance_data(start_date, end_date)
     else:
         if division_dropdown_value:
             dropdown_value = division_dropdown_value
@@ -165,9 +166,9 @@ def update_attendance_graph(division_dropdown_value, area_dropdown_value, start_
             dropdown_value = area_dropdown_value
         # if territory_dropdown_value:
         #     dropdown_value = territory_dropdown_value
-        df = get_attendance_dash_data(dropdown_value, start_date, end_date)
+        df = get_service_attendance_data(dropdown_value, start_date, end_date)
 
-    df_executive_count = get_executive_count_dash_data(dropdown_value)
+    df_executive_count = get_service_executive_count_data(dropdown_value)
 
     if not df.empty:
 

@@ -10298,6 +10298,7 @@ a.text-dark:hover, a.text-dark:focus {
 .container_top_text_color {
     color: #fd7e14;
     font-size: 30px;
+    text-align: left;
 }
 .header_text_size{
     text-align:left;

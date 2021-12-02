@@ -71,7 +71,6 @@ def get_executive_count_dash_data(division_value = 0):
         sql = f'SprDashboardTotalExecutive @BusinessLineId = {businessline_id}, @MarketChannelId = {division_value}'
         df = pd.read_sql_query(sql, conn_tissue)
         return df
-
     except ValueError:
         return ValueError
 
