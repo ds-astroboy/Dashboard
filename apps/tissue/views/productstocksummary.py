@@ -32,7 +32,7 @@ layout = html.Div([
                         dbc.Col([
                             dbc.Label('Division: ', color="white"),
                             dcc.Dropdown(
-                                id='division_dropdown',
+                                id='division_stock_dropdown',
                                 style={
                                     'width': '90%',
                                 },
@@ -78,124 +78,90 @@ layout = html.Div([
                         ], className="create_container")
                     ]),
                 ], className="text-white"),
-        ], md=4, style={'text-align': 'center'}),
+        ], md=3, style={'text-align': 'center'}),
 
         dbc.Col([
                 html.Div([
                     html.Div([
-                    # html.Div([
-                    #     dbc.Row([
-                    #         dbc.Col([
-                    #             html.Div([
-                    #                 html.H4('SALES', className="container_top_text_color"),
-                    #             ])
-                    #         ]),
-                    #         dbc.Col([
-                    #             html.Div([
-                    #                 dcc.Link('DETAILS', href='/salesorderoverview', target="_blank",
-                    #                          className="btn btn-primary btn-lg"),
-                    #             ], style={'text-align': 'left'})
-                    #         ])
-                    #     ]),
-                    #     html.Br(),
-                    #     dbc.Row([
-                    #         dbc.Col([
-                    #         html.Div([
-                    #             html.H6('TOTAL ORDER', className="header_text_size"),
-                    #             html.P(id="total_order",   className="header_text_value_size"),
-                    #             html.H6('SALES AMOUNT', className="header_text_size"),
-                    #             html.P(id="total_sales_amount",  className="header_text_value_size"),
-                    #               ]),
-                    #         ]),
-                    #         dbc.Col([
-                    #         html.Div([
-                    #         html.H6('ORDER QUANTITY', className="header_text_size"),
-                    #         html.P(id="total_order_qty",  className="header_text_value_size" ),
-                    #             html.H6('REMAINING', className="header_text_size"),
-                    #             html.P(id="total_remain_qty",  className="header_text_value_size")
-                    #           ]),
-                    #         ]),
-                    #     ]),
-                    #     ], className="create_container"),
                         html.Div([
                         dcc.Graph(id='product_bar', figure={})
                         ], className="create_container")
                     ]),
                 ], className="text-white"),
-        ], md=8, style={'text-align': 'center'}),
+        ], md=9, style={'text-align': 'center'}),
     ]),
-     dbc.Row([
-               # https://hexcolor.co/hex/1f2c56    Color picker
-                dbc.Col([
-                  html.Div([
-                    html.Div([
-                        html.H4('Category Stock Info', style={'color': 'white'}),
-                      ], style={'text-align': 'left'}),
-                    dash_table.DataTable(id='category_stock',
-                                         data=[],
-                                         fixed_rows={'headers': True},
-                                         style_table={'height': 400},
-                                         style_header={
-                                                'backgroundColor': '#1f2c56',
-                                                 'color': 'white',
-                                                  'fontWeight': 'bold'
-                                                    },
-                                         style_data_conditional=[{
-                                             'if': {'column_editable': False},
-                                             'backgroundColor': '#1f2c56',
-                                             'color': 'white'
-                                         }],
-                                         )
-                ], className="create_container"),
-                ], md=4, style={'text-align': 'center'}),
-         dbc.Col([
-             html.Div([
-                 html.Div([
-                     html.H4('Product Stock Info', style={'color': 'white'}),
-                 ], style={'text-align': 'left'}),
-                 dash_table.DataTable(id='product_stock',
-                                      data=[],
-                                      fixed_rows={'headers': True},
-                                      style_table={'height': 400},
-                                      style_header={
-                                          'backgroundColor': '#1f2c56',
-                                          'color': 'white',
-                                          'fontWeight': 'bold'
-                                      },
-                                      style_data_conditional=[{
-                                          'if': {'column_editable': False},
-                                          'backgroundColor': '#1f2c56',
-                                          'color': 'white',
-                                      }],
-                                      )
-             ], className="create_container"),
-            ], md=8, style={'text-align': 'center'})
-            ])
+
+     # dbc.Row([
+     #           # https://hexcolor.co/hex/1f2c56    Color picker
+     #            dbc.Col([
+     #              html.Div([
+     #                html.Div([
+     #                    html.H4('Category Stock Info', style={'color': 'white'}),
+     #                  ], style={'text-align': 'left'}),
+     #                dash_table.DataTable(id='category_stock',
+     #                                     data=[],
+     #                                     fixed_rows={'headers': True},
+     #                                     style_table={'height': 400},
+     #                                     style_header={
+     #                                            'backgroundColor': '#1f2c56',
+     #                                             'color': 'white',
+     #                                              'fontWeight': 'bold'
+     #                                                },
+     #                                     style_data_conditional=[{
+     #                                         'if': {'column_editable': False},
+     #                                         'backgroundColor': '#1f2c56',
+     #                                         'color': 'white'
+     #                                     }],
+     #                                     )
+     #            ], className="create_container"),
+     #            ], md=4, style={'text-align': 'center'}),
+     #     dbc.Col([
+     #         html.Div([
+     #             html.Div([
+     #                 html.H4('Product Stock Info', style={'color': 'white'}),
+     #             ], style={'text-align': 'left'}),
+     #             dash_table.DataTable(id='product_stock',
+     #                                  data=[],
+     #                                  fixed_rows={'headers': True},
+     #                                  style_table={'height': 400},
+     #                                  style_header={
+     #                                      'backgroundColor': '#1f2c56',
+     #                                      'color': 'white',
+     #                                      'fontWeight': 'bold'
+     #                                  },
+     #                                  style_data_conditional=[{
+     #                                      'if': {'column_editable': False},
+     #                                      'backgroundColor': '#1f2c56',
+     #                                      'color': 'white',
+     #                                  }],
+     #                                  )
+     #         ], className="create_container"),
+     #        ], md=8, style={'text-align': 'center'})
+     #        ])
 ])
 
 
 @app.callback(
     Output('category_pie', 'figure'),
     Output('product_bar', 'figure'),
-    Output('category_stock', 'columns'),
-    Output('category_stock', 'data'),
-    Output('product_stock', 'columns'),
-    Output('product_stock', 'data'),
+    # Output('category_stock', 'columns'),
+    # Output('category_stock', 'data'),
+    # Output('product_stock', 'columns'),
+    # Output('product_stock', 'data'),
 
-    Input('division_dropdown', 'value'),
+    Input('division_stock_dropdown', 'value'),
     Input('start_date', 'date'),
     Input('end_date', 'date'),
 )
 
 def update_product_dashboard(division_dropdown_value, start_date, end_date):
 
-    # Stock by product category
     df = get_service_product_stock_data(division_dropdown_value, start_date, end_date)
     if not df.empty:
-        df_stock = df.sort_values(by=["CurrentStock"],  ascending=False).head(100)
+        df_stock = df.sort_values(by=["CurrentStock"],  ascending=False).head(150)
         category_grouped_df = df.groupby(["ProductCategoryName"], as_index=False)["CurrentStock"].sum().sort_values('CurrentStock',  ascending=False).head(15)
         # category_colors = ['#37F04D', '#3798FA', '#CE67E0', '#F79A65', '#F0E427', '#37B0F0', '#FADD36', '#CE67E0', '#65F799', '#EDA061',  'orange']
-        category_bar = {
+        category_wise_stock_data = {
             'data': [go.Bar(x=category_grouped_df['ProductCategoryName'],
                             y=category_grouped_df['CurrentStock'],
                             # name='',
@@ -241,10 +207,9 @@ def update_product_dashboard(division_dropdown_value, start_date, end_date):
                            ticks='outside',
                            tickfont=dict(
                                family='Arial',
-                               size=12,
+                               size=10,
                                color='white'
                            )
-
                            ),
 
                 yaxis=dict(title='Current Stock',
@@ -260,7 +225,6 @@ def update_product_dashboard(division_dropdown_value, start_date, end_date):
                                size=12,
                                color='white'
                            )
-
                            ),
 
                 # legend={
@@ -275,7 +239,7 @@ def update_product_dashboard(division_dropdown_value, start_date, end_date):
 
         }
 
-        product_bar = {
+        product_wise_stock_data = {
             'data': [go.Bar(x=df_stock['ProductName'],
                             y=df_stock['CurrentStock'],
                             name='',
@@ -320,10 +284,9 @@ def update_product_dashboard(division_dropdown_value, start_date, end_date):
                            ticks='outside',
                            tickfont=dict(
                                family='Arial',
-                               size=12,
+                               size=6,
                                color='white'
                            )
-
                            ),
 
                 yaxis=dict(title='Current Stock',
@@ -352,10 +315,11 @@ def update_product_dashboard(division_dropdown_value, start_date, end_date):
 
         }
 
-        df_category_stock = category_grouped_df[["ProductCategoryName", "CurrentStock"]]
-        df_category_stock.rename(columns={'ProductCategoryName': 'Category', 'CurrentStock': 'Stock'}, inplace=True)
-        df_product_stock = df_stock[["ProductName", "CurrentStock"]]
-        df_product_stock.rename(columns={'ProductName': 'Product', 'CurrentStock': 'Stock'}, inplace=True)
+        # df_category_stock = category_grouped_df[["ProductCategoryName", "CurrentStock"]]
+        # df_category_stock.rename(columns={'ProductCategoryName': 'Category', 'CurrentStock': 'Stock'}, inplace=True)
+        # df_product_stock = df_stock[["ProductName", "CurrentStock"]]
+        # df_product_stock.rename(columns={'ProductName': 'Product', 'CurrentStock': 'Stock'}, inplace=True)
 
-        return category_bar, product_bar, [{"name": i, "id": i} for i in df_category_stock.columns], df_category_stock.to_dict('records'),\
-               [{"name": i, "id": i} for i in df_product_stock.columns], df_product_stock.to_dict('records')
+        return category_wise_stock_data, product_wise_stock_data, \
+               # [{"name": i, "id": i} for i in df_category_stock.columns], df_category_stock.to_dict('records'),\
+               # [{"name": i, "id": i} for i in df_product_stock.columns], df_product_stock.to_dict('records')

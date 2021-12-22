@@ -10280,6 +10280,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 /*# sourceMappingURL=table-custom.css.map */
+/* Custom CSS */
 
 .dcc_compon {
   margin: 0;
@@ -10305,9 +10306,9 @@ a.text-dark:hover, a.text-dark:focus {
     font-size:25px;
 
 }
-.header_text_value_size{
-    text-align:left;
-    font-size:30px;
+.header_text_value_size {
+    text-align: left;
+    font-size: 30px;
     color: orange;
-
 }
+

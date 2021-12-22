@@ -105,6 +105,18 @@ def get_service_executive_count_data(division_value = 0):
     except ValueError:
         return ValueError
 
+def get_service_all_division_executive_count_data():
+    appended_data = []
+    try:
+        market_channels = get_all_marketchannels()
+        for item in market_channels:
+            data = get_service_executive_count_data(item[0])
+            appended_data.append(data)
+        df = pd.concat(appended_data)
+        return df
+    except ValueError:
+        return ValueError
+
 def get_service_product_stock_data(division_value, start_date, end_date):
     try:
         start_date = "'{}'".format(start_date)
@@ -116,6 +128,47 @@ def get_service_product_stock_data(division_value, start_date, end_date):
         return df
     except:
         return "An exception occurred"
+
+def get_service_monthly_secondary_sales_data():
+    try:
+        df = get_monthly_secondary_sales_data()
+        return df
+    except:
+        return "An exception occurred"
+
+def get_service_date_wise_secondary_sales_data(division_value, start_date, end_date):
+    try:
+        start_date = "'{}'".format(start_date)
+        end_date = "'{}'".format(end_date)
+        if division_value is None:
+            division_value = 0
+        df = get_date_wise_secondary_sales_data(division_value, start_date, end_date)
+        return df
+    except:
+        return "An exception occurred"
+
+def get_service_product_wise_secondary_sales_data(division_value, start_date, end_date):
+    try:
+        start_date = "'{}'".format(start_date)
+        end_date = "'{}'".format(end_date)
+        if division_value is None:
+            division_value = 0
+        df = get_product_wise_secondary_sales_data(division_value, start_date, end_date)
+        return df
+    except:
+        return "An exception occurred"
+
+def get_service_category_wise_secondary_sales_data(division_value, start_date, end_date):
+    try:
+        start_date = "'{}'".format(start_date)
+        end_date = "'{}'".format(end_date)
+        if division_value is None:
+            division_value = 0
+        df = get_category_wise_secondary_sales_data(division_value, start_date, end_date)
+        return df
+    except:
+        return "An exception occurred"
+
 
 #endregion
 

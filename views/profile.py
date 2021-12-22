@@ -62,7 +62,7 @@ layout = dbc.Container([
                     placeholder='retype new password',
                     n_submit=0,
                     style={
-                        'width' : '40%'
+                        'width': '40%'
                     },
                 ),
                 html.Br(),
@@ -86,8 +86,9 @@ layout = dbc.Container([
     [Input('pageContent', 'children')])
 def currentUserName(pageContent):
     try:
-        username = current_user.username
-        return username
+        if not current_user:
+            username = current_user.username
+            return username
     except AttributeError:
         return ''
 

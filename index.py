@@ -1,6 +1,7 @@
 
 from dash import html, dcc, Input, Output
 import dash_bootstrap_components as dbc
+import callbacks
 
 from app import app, server
 from flask_login import logout_user, current_user
@@ -8,11 +9,12 @@ from views import login, error, default, page2, profile, user_admin, role, role_
 from apps.tissue.views import test, productoverview, salesorderoverview, productstocksummary, executiveattendance, dashboard,topsale, customdashboard
 from config import conn_security
 
+
 # https://auth0.com/docs/quickstart/backend/python/01-authorization#configure-auth0-apis
 
 navBar = dbc.Navbar(id='navBar',
     children=[],
-     sticky='top',
+    sticky='top',
     color='primary',
     className='navbar navbar-expand-lg navbar-dark bg-primary',
 )
@@ -45,11 +47,12 @@ def displayPage(pathname):
         else:
             return login.layout
 
-    if pathname.lower() == '/dashboard':
-        if current_user.is_authenticated:
-            return dashboard.layout
-        else:
-            return login.layout
+    if pathname.lower() == '/apps/tissue/views/dashboard':
+        return dashboard.layout
+        # if current_user.is_authenticated:
+        #     return dashboard.layout
+        # else:
+        #     return login.layout
         
     # if pathname.lower() == '/page3':
     #     if current_user.is_authenticated:
@@ -74,35 +77,39 @@ def displayPage(pathname):
         else:
             return login.layout
 
-    if pathname == '/productoverview':
-        if current_user.is_authenticated:
-            return productoverview.layout
-        else:
-            return login.layout
+    if pathname == '/apps/tissue/views/viewsproductoverview':
+        return productoverview.layout
+        # if current_user.is_authenticated:
+        #     return productoverview.layout
+        # else:
+        #     return login.layout
 
-    if pathname == '/salesorderoverview':
-        if current_user.is_authenticated:
-            return salesorderoverview.layout
-        else:
-            return login.layout
+    if pathname == '/apps/tissue/views/salesorderoverview':
+        return salesorderoverview.layout
+        # if current_user.is_authenticated:
+        #     return salesorderoverview.layout
+        # else:
+        #     return login.layout
 
-    if pathname == '/productstocksummary':
-        if current_user.is_authenticated:
-            return productstocksummary.layout
-        else:
-            return login.layout
+    if pathname == '/apps/tissue/views/productstocksummary':
+        return productstocksummary.layout
+        # if current_user.is_authenticated:
+        #     return productstocksummary.layout
+        # else:
+        #     return login.layout
 
-    if pathname == '/executiveattendance':
-        if current_user.is_authenticated:
-            return executiveattendance.layout
-        else:
-            return login.layout
+    if pathname == '/apps/tissue/views/executiveattendance':
+        return executiveattendance.layout
+        # if current_user.is_authenticated:
+        #     return executiveattendance.layout
+        # else:
+        #     return login.layout
 
-    if pathname == '/dashboard':
-        if current_user.is_authenticated:
-            return dashboard.layout
-        else:
-            return login.layout
+    # if pathname == '/dashboard':
+    #     if current_user.is_authenticated:
+    #         return dashboard.layout
+    #     else:
+    #         return login.layout
 
     if pathname == '/customdashboard':
         if current_user.is_authenticated:
@@ -116,19 +123,21 @@ def displayPage(pathname):
         else:
             return login.layout
     if pathname == '/profile':
-        if current_user.is_authenticated:
-            return profile.layout
-        else:
-            return login.layout
+        return profile.layout
+        # if current_user.is_authenticated:
+        #     return profile.layout
+        # else:
+        #     return login.layout
 
     if pathname == '/admin':
-        if current_user.is_authenticated:
-            if current_user.admin == 1:
-                return user_admin.layout
-            else:
-                return error.layout
-        else:
-            return login.layout
+        return user_admin.layout
+        # if current_user.is_authenticated:
+        #     if current_user.admin == 1:
+        #         return user_admin.layout
+        #     else:
+        #         return error.layout
+        # else:
+        #     return login.layout
 
     else:
         return error.layout
@@ -181,7 +190,7 @@ def navBar(input1):
             navBarContents = [
                      tisse_menu,
                      config_menu,
-                    dbc.DropdownMenu(
+                     dbc.DropdownMenu(
                         nav=True,
                         in_navbar=True,
                         label=current_user.username,

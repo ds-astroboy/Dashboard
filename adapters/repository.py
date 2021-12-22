@@ -66,7 +66,7 @@ def get_all_marketchannel_stock(marketchannel_id,start_date, end_date):
 
 def get_secondary_sales_data(division_value, start_date, end_date):
     try:
-        sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
+        sql = f'SprDashboardSecondarySales @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
               f',@FromDate= {start_date}, @ToDate = {end_date}'
         df = pd.read_sql_query(sql, conn_tissue)
         return df
@@ -91,8 +91,8 @@ def get_marketchannel_attendance_data(division_value, start_date, end_date):
         cursor.execute(sql)
         conn_tissue.commit()
 
-        df = pd.read_sql_query("select * from ##Temp", conn_tissue)
-        cursor.execute("drop table ##Temp")
+        df = pd.read_sql_query("select * from ##TempAttendance", conn_tissue)
+        cursor.execute("drop table ##TempAttendance")
         cursor.commit()
         return df
 
@@ -115,6 +115,41 @@ def get_marketchannel_attendance_data(division_value, start_date, end_date):
 def get_executive_count_data(division_value = 0):
     try:
         sql = f'SprDashboardTotalExecutive @BusinessLineId = {businessline_id}, @MarketChannelId = {division_value}'
+        df = pd.read_sql_query(sql, conn_tissue)
+        return df
+    except ValueError:
+        return ValueError
+
+def get_monthly_secondary_sales_data():
+    try:
+        sql = f'SprDashboardMonthlySecondarySales @BusinessLineId = {businessline_id}'
+        df = pd.read_sql_query(sql, conn_tissue)
+        return df
+    except ValueError:
+        return ValueError
+
+def get_date_wise_secondary_sales_data(division_value, start_date, end_date):
+    try:
+        sql = f'SprDashboardDateWiseSecondarySales @BusinessLineId = {businessline_id},  @MarketChannelId = {division_value}, ' \
+              f'@FromDate = {start_date}, @ToDate = {end_date} '
+        df = pd.read_sql_query(sql, conn_tissue)
+        return df
+    except ValueError:
+        return ValueError
+
+def get_product_wise_secondary_sales_data(division_value, start_date, end_date):
+    try:
+        sql = f'SprDashboardProductWiseSecondarySales @BusinessLineId = {businessline_id},  @MarketChannelId = {division_value}, ' \
+              f'@FromDate = {start_date}, @ToDate = {end_date} '
+        df = pd.read_sql_query(sql, conn_tissue)
+        return df
+    except ValueError:
+        return ValueError
+
+def get_category_wise_secondary_sales_data(division_value, start_date, end_date):
+    try:
+        sql = f'SprDashboardCategoryWiseSecondarySales @BusinessLineId = {businessline_id},  @MarketChannelId = {division_value}, ' \
+              f'@FromDate = {start_date}, @ToDate = {end_date} '
         df = pd.read_sql_query(sql, conn_tissue)
         return df
     except ValueError:

@@ -5,17 +5,13 @@ import os
 from flask_login import LoginManager, UserMixin
 from configuration.users_mgt import db, User as base
 from config import config
-from flask import Flask
+
 
 
 #https://stackoverflow.com/questions/60322634/deploy-plotly-dash-on-iis
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, suppress_callback_exceptions=True, meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 server = app.server
-app.config.suppress_callback_exceptions = True
-
-# server = Flask(__name__)
-# app = dash.Dash(server=server)
 # app.config.suppress_callback_exceptions = True
 
 # db.init_app(server)

@@ -10,7 +10,7 @@ from app import app
 ###############################################################################
 layout = dbc.Container([
 
-        html.H2('Page 2 Layout'),
+        html.H2('Page 2 Layout', style={"color":"red"}),
         html.Hr(),
 
 
