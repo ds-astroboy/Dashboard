@@ -5,7 +5,7 @@ This web app is a great data visualization tool for showing data on cloud based 
 
 Example of app in action with a layout:
 
-![](/images/dashboard_01.PNG)
+![](/images/dashboard_02.PNG)
 
 
 
