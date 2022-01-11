@@ -10312,3 +10312,8 @@ a.text-dark:hover, a.text-dark:focus {
     color: orange;
 }
 
+.btn-voice:hover {
+        background-color: red;
+
+}
+
