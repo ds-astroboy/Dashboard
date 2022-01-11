@@ -3,12 +3,10 @@ import pandas as pd
 from config import *
 from configuration.dropdown_mgt import get_all_divisions
 
-def get_sales_Dash_data(division_value, start_date, end_date):
+def get_sales_Dash_data(start_date, end_date, division_value=0):
     try:
         start_date = "'{}'".format(start_date)
         end_date = "'{}'".format(end_date)
-        if division_value is None:
-            division_value = 0
         sql = f'SprSecondarySalesInfoDashboard @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
               f',@FromDate= {start_date}, @ToDate = {end_date}'
         df = pd.read_sql_query(sql, conn_tissue)
@@ -17,12 +15,10 @@ def get_sales_Dash_data(division_value, start_date, end_date):
         return "An exception occurred"
 
 
-def get_product_stock_dash_data(division_value, start_date, end_date):
+def get_product_stock_dash_data(start_date, end_date, division_value=0):
     try:
         start_date = "'{}'".format(start_date)
         end_date = "'{}'".format(end_date)
-        if division_value is None:
-            division_value = 0
         sql = f'SprProductDashboardStock @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
               f',@FromDate= {start_date}, @ToDate = {end_date} '
         df = pd.read_sql_query(sql, conn_tissue)
@@ -30,13 +26,10 @@ def get_product_stock_dash_data(division_value, start_date, end_date):
     except:
         return "An exception occurred"
 
-def get_attendance_dash_data(division_value, start_date, end_date):
+def get_attendance_dash_data(start_date, end_date, division_value = 0):
     try:
         start_date = "'{}'".format(start_date)
         end_date = "'{}'".format(end_date)
-        if division_value is None:
-            division_value = 0
-
         sql = f'SprDashboardAttendance @BusinessLineId = {businessline_id}, @MarketChannelId = {division_value}, ' \
               f'@FromDate = {start_date}, @ToDate = {end_date} '
         cursor = conn_tissue.cursor()
