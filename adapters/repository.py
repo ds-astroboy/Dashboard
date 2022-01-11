@@ -76,7 +76,7 @@ def get_secondary_sales_data(division_value, start_date, end_date):
 
 def get_product_stock_data(division_value, start_date, end_date):
     try:
-        sql = f'SprProductDashboardStock @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
+        sql = f'SprDashboardProductStock @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
               f',@FromDate= {start_date}, @ToDate = {end_date} '
         df = pd.read_sql_query(sql, conn_tissue)
         return df

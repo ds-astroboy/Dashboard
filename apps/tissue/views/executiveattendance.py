@@ -145,7 +145,7 @@ def update_attendance(division_dropdown_value, start_date, end_date):
                 html.Div([
                     html.Div([
                         html.Div([
-                            dcc.Graph(id='bar_attendance_' + str(item[0][1]), figure=figure),
+                            dcc.Graph(id='pie_attendance_' + str(item[0][1]), figure=figure),
                         ], className="create_container")
                     ]),
                 ], className="text-white"),
