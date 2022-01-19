@@ -131,9 +131,19 @@ def get_monthly_secondary_sales_data():
 def get_date_wise_secondary_sales_data(division_value, start_date, end_date):
     try:
         sql = f'SprDashboardDateWiseSecondarySales @BusinessLineId = {businessline_id},  @MarketChannelId = {division_value}, ' \
-              f'@FromDate = {start_date}, @ToDate = {end_date} '
+              f'@FromDate = {start_date}, @ToDate = {end_date}'
         df = pd.read_sql_query(sql, conn_tissue)
         return df
+        # sql = f'SprDashboardDateWiseSecondarySales_ML @BusinessLineId = {businessline_id}, @MarketChannelId = {division_value}, ' \
+        #       f'@FromDate = {start_date}, @ToDate = {end_date} '
+        # cursor = conn_tissue.cursor()
+        # cursor.execute(sql)
+        # conn_tissue.commit()
+        #
+        # df = pd.read_sql_query("select * from ##TempDailySales", conn_tissue)
+        # cursor.execute("drop table ##TempDailySales")
+        # cursor.commit()
+        # return df
     except ValueError:
         return ValueError
 
