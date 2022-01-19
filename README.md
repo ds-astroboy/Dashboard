@@ -7,10 +7,10 @@ Example of app in action with a layout:
 
 ![](/images/dashboard.PNG)
 
-AI powered monthly predictive sales
+## AI powered monthly predictive sales
 
 ![](/images/AI.PNG)
 
 Search by voice or text option
 
-![](/images/Searchbyvoiceortext.PNG)
+## ![](/images/Searchbyvoiceortext.PNG)
