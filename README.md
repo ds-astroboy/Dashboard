@@ -13,4 +13,4 @@ Example of app in action with a layout:
 
 ## Search by voice or text option
 
-## ![](/images/Searchbyvoiceortext.PNG)
+![](/images/Searchbyvoiceortext.PNG)
