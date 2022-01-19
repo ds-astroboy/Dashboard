@@ -11,6 +11,6 @@ Example of app in action with a layout:
 
 ![](/images/AI.PNG)
 
-Search by voice or text option
+## Search by voice or text option
 
 ## ![](/images/Searchbyvoiceortext.PNG)
