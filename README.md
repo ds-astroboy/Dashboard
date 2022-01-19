@@ -11,3 +11,6 @@ AI powered monthly predictive sales
 
 ![](/images/AI.PNG)
 
+Search by voice or text option
+
+![](/images/Searchbyvoiceortext.PNG)
