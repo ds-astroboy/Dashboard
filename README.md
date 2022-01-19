@@ -7,5 +7,7 @@ Example of app in action with a layout:
 
 ![](/images/dashboard.PNG)
 
+AI powered monthly predictive sales
 
+![](/images/AI.PNG)
 
