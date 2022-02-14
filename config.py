@@ -22,5 +22,5 @@ conn_security = pyodbc.connect('DRIVER={SQL Server};SERVER='+s_server+';DATABASE
 server = '10.10.244.158'
 database = 'SalesForceDB'
 username = '11900054'
-password = '11900054@Stage158.COM'
+password = '11900054'
 conn_tissue = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+password)
