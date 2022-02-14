@@ -149,14 +149,15 @@ layout = html.Div([
     # Output('product_stock', 'columns'),
     # Output('product_stock', 'data'),
 
-    Input('division_stock_dropdown', 'value'),
+
     Input('start_date', 'date'),
     Input('end_date', 'date'),
+    Input('division_stock_dropdown', 'value')
 )
 
-def update_product_dashboard(division_dropdown_value, start_date, end_date):
+def update_product_dashboard(start_date, end_date, division_dropdown_value):
 
-    df = get_service_product_stock_data(division_dropdown_value, start_date, end_date)
+    df = get_service_product_stock_data(start_date, end_date, division_dropdown_value)
     if not df.empty:
         df_stock = df.sort_values(by=["CurrentStock"],  ascending=False).head(150)
         category_grouped_df = df.groupby(["ProductCategoryName"], as_index=False)["CurrentStock"].sum().sort_values('CurrentStock',  ascending=False).head(15)

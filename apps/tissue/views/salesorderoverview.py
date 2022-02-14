@@ -17,7 +17,7 @@ layout = html.Div([
         dbc.Col([
             html.Div([
                 html.H4('Secondary Sales', style={'fontSize': 30}),
-            ], className='text-white', style={'text-align': 'center'})
+            ], className='text-white', style={'textAlign': 'center'})
         ]),
     ]),
     dbc.Row([
@@ -60,7 +60,7 @@ layout = html.Div([
                         ], md=1),
                     ]),
                 ], className='')
-            ], className='create_container', style={'text-align': 'center'})
+            ], className='create_container', style={'textAlign': 'center'})
         ], md=12),
         # dbc.Col([
         # ], md=1),
@@ -75,7 +75,7 @@ layout = html.Div([
                         ], className="create_container")
                     ]),
                 ], className="text-white"),
-        ], md=3, style={'text-align': 'center'}),
+        ], md=3, style={'textAlign': 'center'}),
 
         dbc.Col([
                 html.Div([
@@ -85,7 +85,7 @@ layout = html.Div([
                         ], className="create_container")
                     ]),
                 ], className="text-white"),
-        ], md=3, style={'text-align': 'center'}),
+        ], md=3, style={'textAlign': 'center'}),
         dbc.Col([
             html.Div([
                 html.Div([
@@ -94,7 +94,7 @@ layout = html.Div([
                     ], className="create_container")
                 ]),
             ], className="text-white"),
-        ], md=6, style={'text-align': 'center'}),
+        ], md=6, style={'textAlign': 'center'}),
     ]),
     # dbc.Row([
     #            # https://hexcolor.co/hex/1f2c56    Color picker
@@ -181,13 +181,16 @@ layout = html.Div([
     # Output('datatable_sales', 'columns'),
     # Output('datatable_sales', 'data'),
 
-    Input('division_sales_dropdown', 'value'),
+
     Input('start_date', 'date'),
     Input('end_date', 'date'),
-)
-def update_salesorder_dashboard(division_dropdown_value, start_date, end_date):
+    Input('division_sales_dropdown', 'value')
 
-    df = get_service_secondary_sales_data(division_dropdown_value, start_date, end_date)
+)
+def update_salesorder_dashboard(start_date, end_date, division_dropdown_value):
+
+    df = get_service_secondary_sales_data(start_date, end_date, division_dropdown_value)
+
     if not df.empty:
         df_party = df.groupby(["PartyName"], as_index=False)["TotalOrderPrice"].sum().sort_values("TotalOrderPrice", ascending=False)
         df_ten_top_party = df_party.head(10)

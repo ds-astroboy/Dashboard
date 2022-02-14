@@ -2,8 +2,9 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc, Input, Output, dash_table
 import plotly.graph_objs as go
-import pandas as pd
+
 from app import app
+from service_layer.AI_Services import *
 from service_layer.services import get_service_marketchannel_stock, get_service_executive_count_data, get_service_all_division_attendance_data,\
     get_service_monthly_secondary_sales_data, get_service_date_wise_secondary_sales_data, get_service_product_wise_secondary_sales_data, \
     get_service_category_wise_secondary_sales_data
@@ -58,8 +59,7 @@ layout = html.Div([
             ])
         ]),
     ]),
-
-   dbc.Row([
+    dbc.Row([
        dbc.Col([
         html.Div([
             html.Div([
@@ -122,7 +122,6 @@ layout = html.Div([
         ], className="card text-white bg-primary")
        ])
    ]),
-
     dbc.Row([
 
         # dbc.Col([
@@ -143,6 +142,16 @@ layout = html.Div([
             html.Div([
                 html.Div([
                     html.Div([
+                        dcc.Graph(id='predictive_sales', figure={}),
+                    ], className="create_container")
+                ]),
+            ], className="text-white"),
+        ], md=4, style={'textAlign': 'center'}),
+
+        dbc.Col([
+            html.Div([
+                html.Div([
+                    html.Div([
                         dcc.Graph(id='attendance_executive', figure={}),
                         html.Div([
                             dcc.Link('MORE', href='/apps/tissue/views/executiveattendance', target="_blank", className="btn btn-primary btn-lg"),
@@ -150,7 +159,7 @@ layout = html.Div([
                     ], className="create_container")
                 ]),
             ], className="text-white"),
-        ], md=6, style={'textAlign': 'center'}),
+        ], md=4, style={'textAlign': 'center'}),
 
         dbc.Col([
             html.Div([
@@ -163,17 +172,33 @@ layout = html.Div([
                     ], className="create_container")
                 ]),
             ], className="text-white"),
-        ], md=6, style={'textAlign': 'center'}),
+        ], md=4, style={'textAlign': 'center'}),
 
+    ]),
+
+    dbc.Row([
+         dbc.Col([
+            html.Div([
+                html.Div([
+                    html.Div([
+                        html.Iframe(src="http://10.10.83.69:8080/3DModel", width=500, height=500),
+                    ], className="create_container")
+                ]),
+            ], className="text-white"),
+        ], md=4, style={'textAlign': 'center'}),
+     # dbc.Col([
+     #        html.Div([
+     #                html.Div([
+     #                    html.Iframe(src="http://10.10.83.69:5050", width=400, height=400),
+     #                ])
+     #        ]),
+     #    ], md=4, style={'textAlign': 'center'}),
     ])
 ])
 
-
-
-
-def get_category_sales(division_id, start_date, end_date, param, is_voice_call=False):
+def get_category_sales(start_date, end_date, param, is_voice_call=False):
     product_category_wise_sales = {}
-    df_category_wise_secondary_sales = get_service_category_wise_secondary_sales_data(division_id, start_date, end_date)
+    df_category_wise_secondary_sales = get_service_category_wise_secondary_sales_data(start_date, end_date)
     df_cat_sorted = df_category_wise_secondary_sales.sort_values('SalesAmount')
     cat_name = df_cat_sorted['Category_Name']
     if 'bar' in param:
@@ -299,9 +324,9 @@ def get_category_sales(division_id, start_date, end_date, param, is_voice_call=F
     else:
         return product_category_wise_sales
 
-def get_product_sales(division_id, start_date, end_date, param, is_voice_call = False):
+def get_product_sales(start_date, end_date, param, is_voice_call = False):
     product_wise_sales_data = {}
-    df_product_wise_secondary_sales = get_service_product_wise_secondary_sales_data(division_id, start_date, end_date)
+    df_product_wise_secondary_sales = get_service_product_wise_secondary_sales_data(start_date, end_date)
     df_sorted = df_product_wise_secondary_sales.sort_values('SalesAmount')
     if 'bar' in param:
         product_wise_sales_data = {
@@ -506,20 +531,20 @@ def respond(voice_data):
             result = get_lastday_sales('lastday')
             return result
         elif 'category sales 3d bar chart' in voice_data or 'category wise sales 3d bar chart' in voice_data or 'category 3d bar chart' in voice_data:
-            result = get_category_sales(0, from_date, to_date, '3d_chart', True)
+            result = get_category_sales(from_date, to_date, '3d_chart', True)
             return result
         elif 'category sales bar chart' in voice_data or 'category wise sales bar chart' in voice_data or 'category bar chart' in voice_data:
-            result = get_category_sales(0, from_date, to_date, 'bar', True)
+            result = get_category_sales(from_date, to_date, 'bar', True)
             return result
         elif 'category sales pie chart' in voice_data or 'category wise sales pie chart' in voice_data or 'category pie chart' in voice_data:
-            result = get_category_sales(0, from_date, to_date, 'pie', True)
+            result = get_category_sales(from_date, to_date, 'pie', True)
             return result
 
         elif 'product sales bar chart' in voice_data or 'product wise sales bar chart' in voice_data or 'product bar chart' in voice_data:
-            result = get_product_sales(0, from_date, to_date, 'bar', True)
+            result = get_product_sales(from_date, to_date, 'bar', True)
             return result
         elif 'product sales pie chart' in voice_data or 'product wise sales pie chart' in voice_data or 'product pie chart' in voice_data:
-            result = get_product_sales(0, from_date, to_date, 'pie', True)
+            result = get_product_sales(from_date, to_date, 'pie', True)
             return result
         elif 'all voice commands' in voice_data or 'all voice command' in voice_data:
             result = get_all_voice_command()
@@ -573,6 +598,8 @@ def update_dashboard(n_clicks, value):
     return output_content
 
 
+
+
 @app.callback(
 
     Output('month_wise_sales', 'figure'),
@@ -582,6 +609,7 @@ def update_dashboard(n_clicks, value):
     # Output('3d_bar_chart_sales', 'figure'),
     Output('attendance_executive', 'figure'),
     Output('stock', 'figure'),
+    Output('predictive_sales', 'figure'),
 
     Input('start_date', 'date'),
     # Input('end_date', 'date'),
@@ -701,7 +729,7 @@ def update_dashboard(start_date):
         )
     }
 
-    stock_df = get_service_marketchannel_stock(0, start_date, end_date)
+    stock_df = get_service_marketchannel_stock(start_date, end_date)
     received_qty = stock_df['ReceivedQty'].sum()
     delivered_qty = stock_df['DeliveredQty'].sum()
     stock_qty = stock_df['Stock'].sum()
@@ -741,7 +769,7 @@ def update_dashboard(start_date):
         ),
 
     }
-    df = get_service_date_wise_secondary_sales_data(0, '2021-12-20', '2021-12-31')
+    df = get_service_date_wise_secondary_sales_data('2021-12-20', '2021-12-31')
     df_sales = df.groupby(["OrderDate"], as_index=False)["SalesAmount"].sum()
     day_wise_sales_data = {
         'data': [go.Bar(x=df_sales['SalesAmount'],
@@ -806,8 +834,8 @@ def update_dashboard(start_date):
     }
     from_date = '2021-12-01'
     to_date = '2021-12-31'
-    product_category_wise_sales = get_category_sales(0, from_date, to_date, 'bar')
-    product_wise_sales_data = get_product_sales(0, from_date, to_date, 'bar')
+    product_category_wise_sales = get_category_sales(from_date, to_date, 'bar')
+    product_wise_sales_data = get_product_sales(from_date, to_date, 'bar')
 
     # features = [2, 3, 5, 10, 20]
     # neighbours = [31, 24, 10, 28, 48]
@@ -821,8 +849,142 @@ def update_dashboard(start_date):
 
     # three_d_fig = get_category_sales(0, from_date, to_date, '3d bar')
 
+    predictive_sales_data = get_AI_service_monthly_secondary_sales_data()
 
-    return month_wise_sales_data, day_wise_sales_data, product_wise_sales_data, product_category_wise_sales, attendance_data, stock_data
+    # predictive_sales_data = {
+    #     'data': [go.Line(predictive_sales, x='OrderDate', y='SalesAmount',
+    #                     # marker=dict(color='#0099cc'),
+    #                     # text=df_sales['SalesAmount'],
+    #                     # texttemplate='%{text:.2s}',
+    #                     # hoverinfo='text',
+    #                     # hovertext=''
+    #                     # orientation='h'
+    #                     ),
+    #              ],
+    #     'layout': go.Layout(
+    #         plot_bgcolor='#1f2c56',
+    #         paper_bgcolor='#1f2c56',
+    #         title={
+    #             'text': 'Day Wise Sales',
+    #             'y': 0.93,
+    #             'x': 0.5,
+    #             'xanchor': 'center',
+    #             'yanchor': 'top'},
+    #         titlefont={
+    #             'color': 'white',
+    #             'size': 20},
+    #
+    #         hovermode='y',
+    #         margin=dict(r=0),
+    #         xaxis=dict(title='',
+    #                    color='white',
+    #                    showline=True,
+    #                    showgrid=True,
+    #                    showticklabels=False,
+    #                    linecolor='white',
+    #                    linewidth=2,
+    #                    ticks='outside',
+    #                    tickfont=dict(
+    #                        family='Arial',
+    #                        size=12,
+    #                        color='white'
+    #                    )
+    #                    ),
+    #
+    #         yaxis=dict(title='Day',
+    #                    color='white',
+    #                    showline=True,
+    #                    showgrid=True,
+    #                    showticklabels=True,
+    #                    linecolor='white',
+    #                    linewidth=2,
+    #                    ticks='outside',
+    #                    tickfont=dict(
+    #                        family='Arial',
+    #                        size=12,
+    #                        color='white'
+    #                    )
+    #                    ),
+    #         font=dict(
+    #             family="sans-serif",
+    #             size=12,
+    #             color='white'),
+    #     )
+    # }
+    # predictive_sales_data = px.line(predictive_sales, x="OrderDate", y="SalesAmount")
+    predictive_sales = predictive_sales_data.sort_values('Year_Month')
+    predictive_sales_data = {
+        'data': [
+            # go.Bar(x=df_sales['OrderDate'],
+            #             y=df_sales['TotalOrderPrice'],
+            #             marker=dict(color='orange'),
+            #             # hoverinfo='text',
+            #             # hovertext=''
+            #             ),
+                 go.Scatter(x=predictive_sales['Month_Year'],
+                            y=predictive_sales['SalesAmount'],
+                            mode='lines',
+                            name='',
+                            line=dict(width=3, color='#FF00FF'),
+                            marker=dict(color='green'),
+                            hoverinfo='text',
+                            hovertext=predictive_sales['SalesAmount']
+                            )
+                 ],
+
+        'layout': go.Layout(
+            plot_bgcolor='#1f2c56',
+            paper_bgcolor='#1f2c56',
+            title={
+                'text': 'AI powered monthly predictive sales',
+                'y': 0.93,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'},
+            titlefont={
+                'color': 'white',
+                'size': 20},
+
+            hovermode='x',
+            margin=dict(r=0),
+            xaxis=dict(title='Month',
+                       color='white',
+                       showline=True,
+                       showgrid=True,
+                       showticklabels=True,
+                       linecolor='white',
+                       linewidth=2,
+                       ticks='outside',
+                       tickfont=dict(
+                           family='Arial',
+                           size=12,
+                           color='white'
+                       )
+
+                       ),
+
+            yaxis=dict(title='Total Sales',
+                       color='white',
+                       showline=True,
+                       showgrid=True,
+                       showticklabels=True,
+                       linecolor='white',
+                       linewidth=2,
+                       ticks='outside',
+                       tickfont=dict(
+                           family='Arial',
+                           size=12,
+                           color='white'
+                       )
+                       ),
+            font=dict(
+                family="sans-serif",
+                size=12,
+                color='white'),
+        )
+
+    }
+    return month_wise_sales_data, day_wise_sales_data, product_wise_sales_data, product_category_wise_sales, attendance_data, stock_data, predictive_sales_data
 
 
 
