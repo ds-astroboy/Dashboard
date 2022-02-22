@@ -7,7 +7,7 @@ from app import app
 from service_layer.AI_Services import *
 from service_layer.services import get_service_marketchannel_stock, get_service_executive_count_data, get_service_all_division_attendance_data,\
     get_service_monthly_secondary_sales_data, get_service_date_wise_secondary_sales_data, get_service_product_wise_secondary_sales_data, \
-    get_service_category_wise_secondary_sales_data
+    get_service_category_wise_secondary_sales_data, get_service_division_wise_secondary_sales_data
 from common.dateinfo import *
 from common.helpler import *
 from helper.three_d_bar_chart_builder import *
@@ -186,15 +186,92 @@ layout = html.Div([
                 ]),
             ], className="text-white"),
         ], md=4, style={'textAlign': 'center'}),
-     # dbc.Col([
-     #        html.Div([
-     #                html.Div([
-     #                    html.Iframe(src="http://10.10.83.69:5050", width=400, height=400),
-     #                ])
-     #        ]),
-     #    ], md=4, style={'textAlign': 'center'}),
-    ])
+
+        dbc.Col([
+            html.Div([
+                html.Div([
+                    html.Div([
+                        dcc.Graph(id='division_sales', figure={}),
+                        # html.Div([
+                        #     dcc.Link('MORE', href='/apps/tissue/views/executiveattendance', target="_blank",
+                        #              className="btn btn-primary btn-lg"),
+                        # ], style={'textAlign': 'right'}),
+                    ], className="create_container")
+                ]),
+            ], className="text-white"),
+        ], md=4, style={'textAlign': 'center'}),
+     ])
 ])
+def get_division_wise_sales():
+    start_date = '2021-12-01'
+    end_date = '2021-12-31'
+    df_category_wise_secondary_sales = get_service_division_wise_secondary_sales_data(start_date, end_date)
+    df_division_sorted = df_category_wise_secondary_sales.sort_values('SalesAmount')
+    div_name = df_division_sorted['Name']
+
+    division_wise_sales = {
+        'data': [go.Bar(x=df_division_sorted['SalesAmount'],
+                            y=df_division_sorted['Name'],
+                            marker=dict(color='#009999'),
+                            text=df_division_sorted['SalesAmount'],
+                            texttemplate='%{text:.2s}',
+                            # hoverinfo='text',
+                            hovertext=div_name,
+                            orientation='h'
+                            ),
+                     ],
+
+        'layout': go.Layout(
+                plot_bgcolor='#1f2c56',
+                paper_bgcolor='#1f2c56',
+                title={
+                    'text': 'Division Wise Sales',
+                    'y': 0.93,
+                    'x': 0.5,
+                    'xanchor': 'center',
+                    'yanchor': 'top'},
+                titlefont={
+                    'color': 'white',
+                    'size': 20},
+
+                hovermode='y',
+                margin=dict(r=2),
+                xaxis=dict(title='',
+                           color='white',
+                           showline=True,
+                           showgrid=True,
+                           showticklabels=False,
+                           linecolor='white',
+                           linewidth=2,
+                           ticks='outside',
+                           tickfont=dict(
+                               family='Arial',
+                               size=12,
+                               color='white'
+                           )
+                           ),
+
+                yaxis=dict(title='',
+                           color='white',
+                           showline=True,
+                           showgrid=True,
+                           showticklabels=True,
+                           linecolor='white',
+                           linewidth=2,
+                           ticks='outside',
+                           tickfont=dict(
+                               family='Arial',
+                               size=8,
+                               color='white'
+                           )
+                           ),
+                font=dict(
+                    family="sans-serif",
+                    size=12,
+                    color='white'),
+            )
+        }
+    return division_wise_sales
 
 def get_category_sales(start_date, end_date, param, is_voice_call=False):
     product_category_wise_sales = {}
@@ -610,6 +687,7 @@ def update_dashboard(n_clicks, value):
     Output('attendance_executive', 'figure'),
     Output('stock', 'figure'),
     Output('predictive_sales', 'figure'),
+    Output('division_sales', 'figure'),
 
     Input('start_date', 'date'),
     # Input('end_date', 'date'),
@@ -984,7 +1062,8 @@ def update_dashboard(start_date):
         )
 
     }
-    return month_wise_sales_data, day_wise_sales_data, product_wise_sales_data, product_category_wise_sales, attendance_data, stock_data, predictive_sales_data
+    division_wise_sales = get_division_wise_sales()
+    return month_wise_sales_data, day_wise_sales_data, product_wise_sales_data, product_category_wise_sales, attendance_data, stock_data, predictive_sales_data, division_wise_sales
 
 
 

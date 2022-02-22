@@ -62,7 +62,7 @@ layout = dbc.Container([
         html.Hr(),
         dbc.Row([
             dbc.Col([
-                dt.DataTable(
+                dash_table.DataTable(
                     id='roles',
                     columns=[{'name': 'ID', 'id': 'RoleId'},
                             {'name': 'Role', 'id': 'RoleName'},

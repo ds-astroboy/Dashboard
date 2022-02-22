@@ -9,15 +9,15 @@ from config import config
 
 # https://cdnjs.com/libraries/three.js/r128
 #https://stackoverflow.com/questions/60322634/deploy-plotly-dash-on-iis
-external_scripts = [
-    'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js',
-    # {'src': 'https://cdn.polyfill.io/v2/polyfill.min.js'},
-    # {
-    #     'src': 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.core.js',
-    #     'integrity': 'sha256-Qqd/EfdABZUcAxjOkMi8eGEivtdTkh3b65xCZL4qAQA=',
-    #     'crossorigin': 'anonymous'
-    # }
-]
+# external_scripts = [
+#     'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js',
+#     # {'src': 'https://cdn.polyfill.io/v2/polyfill.min.js'},
+#     # {
+#     #     'src': 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.core.js',
+#     #     'integrity': 'sha256-Qqd/EfdABZUcAxjOkMi8eGEivtdTkh3b65xCZL4qAQA=',
+#     #     'crossorigin': 'anonymous'
+#     # }
+# ]
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True, meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 server = app.server

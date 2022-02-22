@@ -64,17 +64,16 @@ def get_all_marketchannel_stock(marketchannel_id,start_date, end_date):
     except:
         return "An exception occurred"
 
-def get_secondary_sales_data(division_value, start_date, end_date):
+def get_secondary_sales_data(start_date, end_date, division_value):
     try:
-        sql = f'SprDashboardSecondarySales @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
-              f',@FromDate= {start_date}, @ToDate = {end_date}'
+        sql = f'SprDashboardSecondarySales @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value} ,@FromDate= {start_date}, @ToDate = {end_date}'
         df = pd.read_sql_query(sql, conn_tissue)
         return df
     except:
-        return {'value': -1}
+        return "An exception occurred"
 
 
-def get_product_stock_data(division_value, start_date, end_date):
+def get_product_stock_data(start_date, end_date, division_value):
     try:
         sql = f'SprDashboardProductStock @BusinessLineId = {businessline_id}, @MarketChannel_Id = {division_value}' \
               f',@FromDate= {start_date}, @ToDate = {end_date} '
@@ -159,6 +158,15 @@ def get_product_wise_secondary_sales_data(division_value, start_date, end_date):
 def get_category_wise_secondary_sales_data(division_value, start_date, end_date):
     try:
         sql = f'SprDashboardCategoryWiseSecondarySales @BusinessLineId = {businessline_id},  @MarketChannelId = {division_value}, ' \
+              f'@FromDate = {start_date}, @ToDate = {end_date} '
+        df = pd.read_sql_query(sql, conn_tissue)
+        return df
+    except ValueError:
+        return ValueError
+
+def get_division_wise_secondary_sales_data(start_date, end_date):
+    try:
+        sql = f'SprDashboardDivisionSecondarySales @BusinessLineId = {businessline_id}, ' \
               f'@FromDate = {start_date}, @ToDate = {end_date} '
         df = pd.read_sql_query(sql, conn_tissue)
         return df
