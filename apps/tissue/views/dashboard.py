@@ -176,31 +176,31 @@ layout = html.Div([
 
     ]),
 
-    dbc.Row([
-         dbc.Col([
-            html.Div([
-                html.Div([
-                    html.Div([
-                        html.Iframe(src="http://10.10.83.69:8080/3DModel", width=500, height=500),
-                    ], className="create_container")
-                ]),
-            ], className="text-white"),
-        ], md=4, style={'textAlign': 'center'}),
-
-        dbc.Col([
-            html.Div([
-                html.Div([
-                    html.Div([
-                        dcc.Graph(id='division_sales', figure={}),
-                        # html.Div([
-                        #     dcc.Link('MORE', href='/apps/tissue/views/executiveattendance', target="_blank",
-                        #              className="btn btn-primary btn-lg"),
-                        # ], style={'textAlign': 'right'}),
-                    ], className="create_container")
-                ]),
-            ], className="text-white"),
-        ], md=4, style={'textAlign': 'center'}),
-     ])
+    # dbc.Row([
+    #      dbc.Col([
+    #         html.Div([
+    #             html.Div([
+    #                 html.Div([
+    #                     html.Iframe(src="http://10.10.83.69:8080/3DModel", width=500, height=500),
+    #                 ], className="create_container")
+    #             ]),
+    #         ], className="text-white"),
+    #     ], md=4, style={'textAlign': 'center'}),
+    #
+    #     dbc.Col([
+    #         html.Div([
+    #             html.Div([
+    #                 html.Div([
+    #                     dcc.Graph(id='division_sales', figure={}),
+    #                     # html.Div([
+    #                     #     dcc.Link('MORE', href='/apps/tissue/views/executiveattendance', target="_blank",
+    #                     #              className="btn btn-primary btn-lg"),
+    #                     # ], style={'textAlign': 'right'}),
+    #                 ], className="create_container")
+    #             ]),
+    #         ], className="text-white"),
+    #     ], md=4, style={'textAlign': 'center'}),
+    #  ])
 ])
 def get_division_wise_sales():
     start_date = '2021-12-01'
@@ -687,7 +687,7 @@ def update_dashboard(n_clicks, value):
     Output('attendance_executive', 'figure'),
     Output('stock', 'figure'),
     Output('predictive_sales', 'figure'),
-    Output('division_sales', 'figure'),
+    # Output('division_sales', 'figure'),
 
     Input('start_date', 'date'),
     # Input('end_date', 'date'),
@@ -1062,8 +1062,10 @@ def update_dashboard(start_date):
         )
 
     }
-    division_wise_sales = get_division_wise_sales()
-    return month_wise_sales_data, day_wise_sales_data, product_wise_sales_data, product_category_wise_sales, attendance_data, stock_data, predictive_sales_data, division_wise_sales
+    # division_wise_sales = get_division_wise_sales() \
+
+    return month_wise_sales_data, day_wise_sales_data, product_wise_sales_data, product_category_wise_sales, attendance_data, stock_data, predictive_sales_data
+    # , division_wise_sales
 
 
 
