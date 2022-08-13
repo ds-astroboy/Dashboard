@@ -132,7 +132,7 @@ def get_figure_content(df_executive, df_attendance, MC_Id, market_channel):
 
 def update_attendance(division_dropdown_value, start_date, end_date):
 
-    start_date = '10/13/2021'
+    start_date = '05/31/2022'
     end_date = start_date
     content = []
     df_executive = get_service_all_division_executive_count_data()

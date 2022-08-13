@@ -63,7 +63,7 @@ layout = html.Div([
        dbc.Col([
         html.Div([
             html.Div([
-             html.H4("Secondary Sales", style={"textAlign": "center"}),
+             # html.H4("Secondary Sales", style={"textAlign": "center"}),
                 html.Div([
                     dbc.Row([
                         dbc.Col([
@@ -146,7 +146,7 @@ layout = html.Div([
                     ], className="create_container")
                 ]),
             ], className="text-white"),
-        ], md=4, style={'textAlign': 'center'}),
+        ], md=6, style={'textAlign': 'center'}),
 
         dbc.Col([
             html.Div([
@@ -159,7 +159,7 @@ layout = html.Div([
                     ], className="create_container")
                 ]),
             ], className="text-white"),
-        ], md=4, style={'textAlign': 'center'}),
+        ], md=3, style={'textAlign': 'center'}),
 
         dbc.Col([
             html.Div([
@@ -172,7 +172,7 @@ layout = html.Div([
                     ], className="create_container")
                 ]),
             ], className="text-white"),
-        ], md=4, style={'textAlign': 'center'}),
+        ], md=3, style={'textAlign': 'center'}),
 
     ]),
 
@@ -675,8 +675,6 @@ def update_dashboard(n_clicks, value):
     return output_content
 
 
-
-
 @app.callback(
 
     Output('month_wise_sales', 'figure'),
@@ -847,7 +845,7 @@ def update_dashboard(start_date):
         ),
 
     }
-    df = get_service_date_wise_secondary_sales_data('2021-12-20', '2021-12-31')
+    df = get_service_date_wise_secondary_sales_data('2022-06-10', '2022-06-20')
     df_sales = df.groupby(["OrderDate"], as_index=False)["SalesAmount"].sum()
     day_wise_sales_data = {
         'data': [go.Bar(x=df_sales['SalesAmount'],
@@ -864,7 +862,7 @@ def update_dashboard(start_date):
             plot_bgcolor='#1f2c56',
             paper_bgcolor='#1f2c56',
             title={
-                'text': 'Day Wise Sales',
+                'text': 'Last 10 days Sales',
                 'y': 0.93,
                 'x': 0.5,
                 'xanchor': 'center',
@@ -910,8 +908,8 @@ def update_dashboard(start_date):
                 color='white'),
         )
     }
-    from_date = '2021-12-01'
-    to_date = '2021-12-31'
+    from_date = '2022-05-01'
+    to_date = '2022-05-31'
     product_category_wise_sales = get_category_sales(from_date, to_date, 'bar')
     product_wise_sales_data = get_product_sales(from_date, to_date, 'bar')
 
@@ -1003,7 +1001,7 @@ def update_dashboard(start_date):
                             y=predictive_sales['SalesAmount'],
                             mode='lines',
                             name='',
-                            line=dict(width=3, color='#FF00FF'),
+                            line=dict(width=2, color='#FF00FF'),
                             marker=dict(color='green'),
                             hoverinfo='text',
                             hovertext=predictive_sales['SalesAmount']
