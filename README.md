@@ -5,12 +5,7 @@ This web app is a great data visualization tool for showing data on cloud based 
 This app works as digital assistance and can understand voice command to produce desired outcome.
 Example of app in action with a layout:
 
-![](/images/dashboard.PNG)
-
-## AI powered monthly predictive sales
-
-![](/images/AI.PNG)
-
-## Search by voice or text option
-
-![](/images/Searchbyvoiceortext.PNG)
+![](/images/Page1.PNG)
+![](/images/Page2.PNG)
+![](/images/Page3.PNG)
+![](/images/Page4.PNG)
