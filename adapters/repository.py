@@ -122,7 +122,7 @@ def get_executive_count_data(division_value = 0):
 def get_monthly_secondary_sales_data():
     try:
         sql = f'SprDashboardMonthlySecondarySales @BusinessLineId = {businessline_id}'
-        df = pd.read_sql_query('select * from DashboardPredictiveTable', conn_tissue)
+        df = pd.read_sql_query(sql, conn_tissue)
         return df
     except ValueError:
         return ValueError

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BGAnalytics.iml" filepath="$PROJECT_DIR$/.idea/BGAnalytics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BGDashboard.iml" filepath="$PROJECT_DIR$/.idea/BGDashboard.iml" />
     </modules>
   </component>
 </project>

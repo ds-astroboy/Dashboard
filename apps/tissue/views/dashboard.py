@@ -679,8 +679,9 @@ def update_dashboard(n_clicks, value):
 
     Output('month_wise_sales', 'figure'),
     Output('day_wise_sales', 'figure'),
-    Output('product_wise_sales', 'figure'),
+
     Output('category_wise_sales', 'figure'),
+    Output('product_wise_sales', 'figure'),
     # Output('3d_bar_chart_sales', 'figure'),
     Output('attendance_executive', 'figure'),
     Output('stock', 'figure'),
@@ -694,7 +695,7 @@ def update_dashboard(n_clicks, value):
 
 def update_dashboard(start_date):
 
-    start_date = '10/13/2021'
+    start_date = '2022-04-10'
     end_date = start_date
 
     df_executive_count = get_service_executive_count_data(0)
@@ -845,7 +846,7 @@ def update_dashboard(start_date):
         ),
 
     }
-    df = get_service_date_wise_secondary_sales_data('2022-06-10', '2022-06-20')
+    df = get_service_date_wise_secondary_sales_data('2022-06-01', '2022-06-10')
     df_sales = df.groupby(["OrderDate"], as_index=False)["SalesAmount"].sum()
     day_wise_sales_data = {
         'data': [go.Bar(x=df_sales['SalesAmount'],
@@ -908,11 +909,10 @@ def update_dashboard(start_date):
                 color='white'),
         )
     }
-    from_date = '2022-05-01'
-    to_date = '2022-05-31'
+    from_date = '2022-04-01'
+    to_date = '2022-04-30'
     product_category_wise_sales = get_category_sales(from_date, to_date, 'bar')
     product_wise_sales_data = get_product_sales(from_date, to_date, 'bar')
-
     # features = [2, 3, 5, 10, 20]
     # neighbours = [31, 24, 10, 28, 48]
     # accuracies = [0.9727, 0.9994, 0.9994, 0.9995, 0.9995]
@@ -1001,7 +1001,7 @@ def update_dashboard(start_date):
                             y=predictive_sales['SalesAmount'],
                             mode='lines',
                             name='',
-                            line=dict(width=2, color='#FF00FF'),
+                            line=dict(width=3, color='#FF00FF'),
                             marker=dict(color='green'),
                             hoverinfo='text',
                             hovertext=predictive_sales['SalesAmount']
@@ -1062,7 +1062,9 @@ def update_dashboard(start_date):
     }
     # division_wise_sales = get_division_wise_sales() \
 
-    return month_wise_sales_data, day_wise_sales_data, product_wise_sales_data, product_category_wise_sales, attendance_data, stock_data, predictive_sales_data
+    return month_wise_sales_data\
+        , day_wise_sales_data, product_category_wise_sales, product_wise_sales_data\
+        , attendance_data, stock_data, predictive_sales_data
     # , division_wise_sales
 
 

@@ -12,7 +12,7 @@ engine = create_engine(config.get('database', 'con'))
 db = SQLAlchemy()
 
 # Security connection
-s_server = '10.10.83.69'
+s_server = '10.10.83.153'
 s_Database = 'DashSecurity'
 s_username = 'sa'
 s_password = 'Root@pass1'

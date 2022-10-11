@@ -1,7 +1,7 @@
 
 from dash import html, dcc, Input, Output
 import dash_bootstrap_components as dbc
-import callbacks
+
 
 from app import app, server
 from flask_login import logout_user, current_user
@@ -263,4 +263,4 @@ def navBar(input1):
         return ''
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8051)
