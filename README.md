@@ -9,4 +9,4 @@ Example of app in action with a layout:
 ![](/images/Page2.JPG)
 ![](/images/Page3.JPG)
 ![](/images/Page4.JPG)
-<video src='https://www.youtube.com/watch?v=RkAQVm9nBDQ)' width=180/>
+https://www.youtube.com/watch?v=RkAQVm9nBDQ)
