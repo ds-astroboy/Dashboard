@@ -5,7 +5,7 @@ This web app is a great data visualization tool for showing data on cloud based 
 This app works as digital assistance and can understand voice command to produce desired outcome.
 Example of app in action with a layout:
 # Video
-https://youtu.be/RkAQVm9nBDQ
+https://youtu.be/TLusoon1onQ
 
 ![](/images/Page1.JPG)
 ![](/images/Page2.JPG)
