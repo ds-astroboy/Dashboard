@@ -10,3 +10,4 @@ Example of app in action with a layout:
 ![](/images/Page3.JPG)
 ![](/images/Page4.JPG)
 ![](/images/video/Dashboard.mp4)
+<video src='/images/video/Dashboard.mp4' width=180/>
